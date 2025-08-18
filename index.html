@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+ <!-- 在这里粘贴下面的脚本 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/cJ9rJdrz/IMG-6933.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/CMZqNMRh/IMG-6497.jpg">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <title>EPhone</title>
+
     <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
     <style>
         @font-face { font-family: 'bulangni'; src: url('') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }
-        :root { --screen-width: 350px; --screen-height: 650px; --secondary-bg: #ffffff; --border-color: #e0e0e0; --text-primary: #1f1f1f; --text-secondary: #8a8a8a; --accent-color: #007bff; }
+        :root { --screen-width: 350px; --screen-height: 650px; --secondary-bg: #ffffff; --border-color: #e0e0e0; --text-primary: #1f1f1f; --text-secondary: #8a8a8a; --accent-color: #007bff;   --status-bar-text-color: #000000; }
         html { height: 100%; overflow: hidden; }
 
 /* ▼▼▼ 请用下面这【一整块】全新的代码，替换掉所有旧的 body, phone-frame, phone-screen 等样式 ▼▼▼ */
@@ -24,6 +26,7 @@ body {
     margin: 0;
     font-family: 'bulangni', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-weight: normal;
+    /* 背景色可以根据喜好设定，这里用一个柔和的颜色 */
     background-color: #f0f2f5; 
 }
 
@@ -35,7 +38,7 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background-color: #000; /* 保留一个默认的黑色背景 */
+    background-color: #fff; 
 }
 
 /* 3. 【核心】隐藏掉模拟器的状态栏 */
@@ -54,12 +57,18 @@ body {
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
 }
 
-        #status-bar { position: absolute; top: 0; left: 0; width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; color: white; z-index: 10; font-size: 14px; box-sizing: border-box; pointer-events: none; }
+#chat-list-bottom-nav {
+     padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ▲▲▲ 替换结束 ▲▲▲ */
+
+        #status-bar { position: absolute; top: 0; left: 0; width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;     color: var(--status-bar-text-color); /* <-- 应用变量 */ z-index: 10; font-size: 14px; box-sizing: border-box; pointer-events: none; }
         #status-bar-time { font-weight: 600; }
         .battery-container { display: flex; align-items: center; gap: 5px; }
-        .battery-icon { width: 25px; height: 12px; border: 1px solid white; border-radius: 3px; position: relative; padding: 1px; }
-        .battery-icon::after { content: ''; position: absolute; right: -3px; top: 2px; width: 2px; height: 6px; background-color: white; border-radius: 0 1px 1px 0; }
-        .battery-level { height: 100%; background-color: white; border-radius: 1px; transition: width 0.5s ease; }
+        .battery-icon { width: 25px; height: 12px;     border: 1px solid currentColor; border-radius: 3px; position: relative; padding: 1px; }
+        .battery-icon::after { content: ''; position: absolute; right: -3px; top: 2px; width: 2px; height: 6px;    background-color: currentColor;  border-radius: 0 1px 1px 0; }
+        .battery-level { height: 100%; background-color: currentColor; border-radius: 1px; transition: width 0.5s ease; }
         .battery-container.charging .battery-level { background-color: #4cd964; animation: charge-breath 2s infinite; }
         .battery-container.charging .battery-text { color: #4cd964; }
         @keyframes charge-breath { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
@@ -111,7 +120,7 @@ body {
 #chat-list {
     flex-grow: 1;
     background-color: var(--secondary-bg);
-    padding-top: 80px; 
+    padding-top: 100px; 
     padding-bottom: 50px; /* 为底部导航栏留出空间 */
     box-sizing: border-box;
 }
@@ -677,7 +686,6 @@ body {
     display: none;
 }
 
-.chat-list-item:first-child,
 .chat-group-container:first-child {
     margin-top: 10px; 
 }
@@ -3223,10 +3231,12 @@ body {
 
 /* 1. 全局背景和文本颜色 */
 #phone-screen.dark-mode {
+  --status-bar-text-color: #ffffff;
     --secondary-bg: #1c1c1e; /* 主要卡片背景色 */
     --border-color: #38383a;  /* 边框颜色 */
     --text-primary: #ffffff;   /* 主要文字颜色 */
     --text-secondary: #8d8d92; /* 次要文字/图标颜色 */
+
 }
 
 /* 2. 各个页面的主背景色 */
@@ -4232,7 +4242,648 @@ input:checked + .slider:before {
 
 /* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
 
+/* === 头像框选择模态框样式 (这是新添加的) === */
+.change-frame-btn {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+#avatar-frame-modal .modal-content {
+    height: 70%; /* 让窗口高一点 */
+}
+
+#avatar-frame-modal .modal-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+      
+.frame-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.frame-tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-secondary);
+    border-bottom: 2px solid transparent;
+}
+
+.frame-tab.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
+.frame-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.frame-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* 每行自动填充，最小70px宽 */
+    gap: 15px;
+}
+
+.frame-item {
+    aspect-ratio: 1 / 1; /* 保持正方形 */
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    background-size: cover;
+    background-position: center;
+    padding: 5px;
+    transition: all 0.2s ease;
+    position: relative; /* 为预览图做准备 */
+}
+
+.frame-item.selected {
+    border-color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.frame-item .preview-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.frame-item .preview-frame {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ▼▼▼ 把这些CSS加回去 ▼▼▼ */
+.avatar-with-frame {
+    position: relative;
+    width: 34px; /* 和普通头像一样大 */
+    height: 34px;
+    flex-shrink: 0;
+}
+.avatar-with-frame .avatar-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; /* 带框的头像通常是圆的 */
+    object-fit: cover;
+    z-index: 1;
+}
+.avatar-with-frame .avatar-frame {
+    position: absolute;
+    /* 核心修改1：使用百分比来定义大小 */
+    /* 这会让头像框的尺寸永远是其父容器（也就是头像大小）的1.5倍 */
+    /* 如果你觉得框太大了或太小了，可以微调这里的数值，比如 140% 或 160% */
+    width: 135%; 
+    height: 135%;
+
+    /* 核心修改2：使用transform变换来实现完美居中 */
+    top: 43%; /* 先把框的左上角移动到父容器的中心点 */
+    left: 50%;
+    /* 再把框向左、向上移动自己宽高的一半，这样框的中心就和父容器的中心完全对齐了 */
+    transform: translate(-50%, -50%); 
+    
+    z-index: 2;
+    pointer-events: none; /* 让框不影响鼠标事件 */
+}
+/* ▲▲▲ 添加结束 ▲▲▲ */
+
+/* ▼▼▼ 【最终美化版】聊天列表左滑置顶功能样式 (已修复Bug) ▼▼▼ */
+
+/* 1. 外层包裹容器 (已移除 display:flex) */
+.chat-list-item-swipe-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* 2. 可滑动的内容区 (保持不变) */
+.chat-list-item-content {
+    position: relative;
+    z-index: 2;
+    background-color: var(--secondary-bg);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+/* 3. 【核心修改1】置顶聊天时，使用对比度更强的背景色 */
+.chat-list-item-content.pinned {
+    background-color: #f0f2f5; /* 日间模式下的置顶颜色 (已加深) */
+}
+#phone-screen.dark-mode .chat-list-item-content.pinned {
+    background-color: #3a3a3c; /* 夜间模式下的置顶颜色 (已加深) */
+}
+
+/* 4. 隐藏的操作按钮区域 (保持不变) */
+.swipe-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+}
+
+/* 5. 单个操作按钮的样式 (保持不变) */
+.swipe-action-btn {
+    height: 100%;
+    padding: 0 20px;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+}
+
+.swipe-action-btn.pin { background-color: #f0ad4e; }
+.swipe-action-btn.unpin { background-color: #777; }
+.swipe-action-btn.delete { background-color: #ff3b30; }
+
+/* 6. 当内容区被滑开时 (保持不变) */
+.chat-list-item-content.swiped {
+    transform: translateX(-160px);
+}
+
+/* 7. 分割线的正确逻辑 (保持不变) */
+.chat-list-item {
+    border-bottom: none;
+}
+.chat-list-item-swipe-container:not(:last-child) {
+     border-bottom: 1px solid var(--border-color);
+}
+.chat-group-container {
+    border-bottom: 1px solid var(--border-color);
+}
+.chat-group-container:first-of-type {
+    border-top: 1px solid var(--border-color);
+}
+/* ▲▲▲ 新样式粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 用下面这段【新样式】，替换掉你旧的 .date-stamp 样式 ▼▼▼ */
+
+/* 日期戳的外层包裹，让它像系统消息一样居中 */
+.date-stamp-wrapper {
+    justify-content: center;
+    align-self: center;
+    margin: 10px 0;
+    max-width: 80%;
+}
+
+/* 日期戳的气泡本身 */
+.date-stamp-bubble {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--text-secondary);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 10px;
+}
+
+/* 适配夜间模式 */
+#phone-screen.dark-mode .date-stamp-bubble {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+/* ▲▲▲ 替换结束 ▲▲▲ */
+
+/* ▼▼▼ 请将这段新CSS粘贴到 <style> 的末尾 ▼▼▼ */
+.chat-list-time {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-left: 8px; /* 和中间的信息区拉开一点距离 */
+    flex-shrink: 0;   /* 防止在空间不足时被压缩 */
+    align-self: flex-start; /* 让它和顶部的名字对齐 */
+    padding-top: 2px; /* 微调垂直位置 */
+}
+/* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 请将这段新CSS粘贴到 <style> 的末尾 ▼▼▼ */
+.chat-list-right-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* 让内容靠右对齐 */
+    gap: 4px; /* 在时间和红点之间加一点点间距 */
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+/* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 【全新】聊天记录搜索功能样式 ▼▼▼ */
+
+/* 搜索结果条目样式 */
+.search-result-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.search-result-item:hover {
+    background-color: #f5f5f5;
+}
+#phone-screen.dark-mode .search-result-item:hover {
+    background-color: #2c2c2e;
+}
+
+.search-result-item .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.search-result-item .result-content {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.search-result-item .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.search-result-item .result-sender {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.search-result-item .result-timestamp {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.search-result-item .result-message-snippet {
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+/* 搜索结果中的高亮关键词 */
+.search-result-item .highlight {
+    background-color: #ffd700;
+    color: #000;
+    font-weight: bold;
+    border-radius: 3px;
+    padding: 1px 3px;
+}
+#phone-screen.dark-mode .search-result-item .highlight {
+    background-color: #ffc107;
+}
+
+
+/* ▼▼▼ 【全新】聊天记录高亮功能样式 (文字高亮版) ▼▼▼ */
+
+/* 1. 定义一个新的动画，这次我们同时改变背景色和文字颜色 */
+@keyframes jump-highlight-text {
+    0% {
+        background-color: transparent; /* 动画开始时，文字背景是透明的 */
+        color: inherit; /* 文字颜色继承它本来的颜色 */
+    }
+    50% {
+        background-color: #ffd700; /* 在动画中间，文字背景变为高亮的黄色 */
+        color: #000000 !important; /* 同时，强制把文字颜色变为黑色，确保在黄底上清晰可见 */
+    }
+    100% {
+        background-color: transparent; /* 动画结束，文字背景恢复透明 */
+        color: inherit; /* 文字颜色也恢复原样 */
+    }
+}
+
+/* 2. 将这个新动画应用到消息气泡的 .content 区域 */
+/*    这样它就只会影响文字区域，而不会影响整个气泡 */
+.jump-highlight-animation .content {
+    animation: jump-highlight-text 1.5s ease-in-out;
+    border-radius: 5px; /* (可选)给高亮区域一点点圆角，更好看 */
+}
+
+/* ▲▲▲ 新样式粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 【全新】搜索界面美化样式 ▼▼▼ */
+#chat-search-screen {
+    background-color: #f0f2f5; /* 和其他内容页统一的背景色 */
+}
+#search-controls {
+    background-color: var(--secondary-bg); /* 让控制区背景能适配夜间模式 */
+}
+#phone-screen.dark-mode #chat-search-screen {
+    background-color: #000000;
+}
+/* ▲▲▲ 新样式粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 【全新】锁屏与密码界面样式 ▼▼▼ */
+
+/* 1. 锁屏界面的总容器 */
+#lock-screen {
+    /* 核心：用一个非常高的 z-index 确保它能覆盖所有其他屏幕 */
+    z-index: 999; 
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 让时钟和提示语上下分布 */
+    align-items: center;
+    padding: 80px 20px 50px 20px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-out;
+}
+
+/* 2. 锁屏时钟 (复用主屏幕时钟的样式) */
+#lock-clock-container {
+    text-align: center;
+    text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    flex-shrink: 0;
+}
+#lock-main-time {
+    font-size: 80px;
+    font-weight: 200;
+}
+#lock-main-date {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* 3. “向上轻扫”的提示文字和动画 */
+#unlock-hint {
+    font-size: 16px;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    /* 添加一个呼吸动画，吸引用户注意 */
+    animation: hint-pulse 2s infinite ease-in-out;
+}
+@keyframes hint-pulse {
+    0%, 100% { opacity: 0.7; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-5px); }
+}
+
+/* 4. 密码输入弹窗的遮罩层 */
+#password-modal-overlay {
+    /* 使用一个半透明的毛玻璃效果背景 */
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000; /* 比锁屏更高，确保在最上层 */
+}
+
+/* 5. 密码输入弹窗的内容区 */
+.password-modal-content {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    width: 280px;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: #333;
+}
+.password-modal-content p {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* 6. 密码输入框 */
+#password-input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: rgba(255,255,255,0.7);
+}
+#password-input-field:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* 7. 密码弹窗的按钮区域 */
+.password-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+.password-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+#password-cancel-btn {
+    background-color: #e9ecef;
+    color: #495057;
+}
+#password-confirm-btn {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* 8. 密码错误时的晃动动画 */
+@keyframes shake-error {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+.password-modal-content.error {
+    animation: shake-error 0.4s ease-in-out;
+}
+/* ▲▲▲ 新样式粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 【全新】气泡/API样式预设功能CSS ▼▼▼ */
+.bubble-preset-manager {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 元素之间的间距 */
+}
+
+/* 下拉框的样式，让它占据大部分空间 */
+.bubble-preset-manager select {
+    flex-grow: 1; /* 占据所有剩余空间 */
+}
+
+/* 管理按钮的样式，让它小巧精致 */
+.bubble-preset-manager .action-btn {
+    flex-shrink: 0; /* 防止按钮被压缩 */
+    padding: 8px 10px;
+    font-size: 13px;
+    background-color: #e9ecef;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+}
+/* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 把这一整块全新的CSS，粘贴到 <style> 的末尾 ▼▼▼ */
+
+/* 1. 让锁屏和主屏幕可以堆叠 */
+/* 核心：把锁屏和主屏幕都设为绝对定位，这样它们才能重叠 */
+#lock-screen, #home-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* 2. 定义毛玻璃背景层的样式 */
+#lock-screen-background-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* 【核心修改1】它的层级现在和主屏幕一样低 */
+    
+    background-size: cover;
+    background-position: center;
+
+    /* 【核心修改2】魔法在这里！我们直接模糊这个元素本身 */
+    filter: blur(20px);
+    -webkit-filter: blur(20px);
+    
+    /* (可选但推荐) 轻微放大可以避免模糊后边缘变暗，效果更好 */
+    transform: scale(1.1); 
+
+    /* 【核心修改3】默认隐藏，且带有淡入淡出效果 */
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+/* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
+
+/* ▼▼▼ 从这里开始复制 ▼▼▼ */
+
+/* === 【终极修复版】世界书选择器列表样式 === */
+
+/* 1. 分类文件夹行样式：用gap创建固定间距，超稳定 */
+.wb-category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 箭头、复选框、文字之间的固定间距 */
+    padding: 10px 12px;
+    cursor: pointer;
+    background-color: #f0f2f5;
+    font-weight: 600;
+    overflow: hidden; /* 防止任何意外 */
+}
+
+/* 2. 分类文件夹里的文字样式：只负责截断，不负责布局 */
+.wb-category-header > span:last-of-type {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 3. 【核心修复】为分类文件夹和书目里的复选框“解绑”全局样式！ */
+.wb-category-header input[type="checkbox"],
+.wb-book-container input[type="checkbox"] {
+    width: auto !important; /* 让它恢复自己的天然大小，!important确保最高优先级 */
+    flex-shrink: 0;         /* 防止它被压缩 */
+}
+
+/* 4. 具体书目行的样式：强制从左边开始排列，解决iOS问题 */
+.wb-book-container label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 强制所有内容从左边开始！*/
+    padding: 8px 12px;
+    gap: 10px; /* 复选框和文字的间距 */
+    overflow: hidden;
+}
+
+/* 5. 具体书目的文字样式 */
+.wb-book-container label .wb-book-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+/* 6. 夜间模式适配 */
+#phone-screen.dark-mode .wb-category-header {
+    background-color: #2c2c2e;
+}
+
+/* 7. 小箭头的样式（保持不变） */
+.wb-category-header .arrow {
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+.wb-category-header.collapsed .arrow {
+    transform: rotate(-90deg);
+}
+
+/* 8. 书籍容器的样式（保持不变） */
+.wb-book-container {
+    padding-left: 20px;
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+.wb-book-container.collapsed {
+    max-height: 0;
+}
+
+/* ▲▲▲ 复制到这里结束 ▲▲▲ */
+
+/* ▼▼▼ 【全新】鼠标拖动工具栏时的手势样式 ▼▼▼ */
+#chat-input-actions-top.grabbing {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+    user-select: none; /* 防止拖动时选中文本 */
+}
+/* ▲▲▲ 新CSS粘贴结束 ▲▲▲ */
+
+#status-bar-time::after {
+    content: "JCY";
+    color: var(--status-bar-text-color); /* <-- 应用变量 */
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.6; /* 统一的不透明度 */
+    margin-left: 8px;
+    user-select: none;
+    transition: color 0.3s;
+}
+
     </style>
+    <!-- ▼▼▼ 在这里添加下面这行 ▼▼▼ -->
+    <style id="custom-theme-style"></style>
 </head>
 <body>
         <div id="phone-screen">
@@ -4246,6 +4897,10 @@ input:checked + .slider:before {
                 </div>
             </div>
             <div id="notification-bar"><img id="notification-avatar" src=""><div id="notification-content"><div class="name"></div><div class="message"></div></div></div>
+
+<!-- ▼▼▼ 在这里粘贴下面这行新代码 ▼▼▼ -->
+<div id="lock-screen-background-blur" style="display: none;"></div>
+<!-- ▲▲▲ 粘贴结束 ▲▲▲ -->
             
             <div id="home-screen" class="screen active">
                 <div id="clock-container"><div id="main-time">12:00</div><div id="main-date">星期一, 1月1日</div></div>
@@ -4335,7 +4990,17 @@ input:checked + .slider:before {
                 </div>
             </div>
 
-            <div id="api-settings-screen" class="screen"><div class="header"><span class="back-btn" onclick="showScreen('home-screen')">‹</span><span>API 设置</span><span style="width: 30px;"></span></div><div class="form-container"><p style="font-size: 14px; color: #666; background-color: #f0f0f0; padding: 10px; border-radius: 8px;">提示: 若要使用“发送图片”功能, 请务必选择支持Vision(视觉)的模型, 如<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4o</code>或<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4-vision-preview</code>。</p><div class="form-group"><label for="proxy-url">反代地址 (不需要添加/v1噢~)</label><input type="text" id="proxy-url" placeholder="例如: https://api.openai.com"></div><div class="form-group"><label for="api-key">密钥 (直连轮询用英文逗号隔开)</label><input type="password" id="api-key" placeholder="sk-..."></div><div class="form-group"><label for="model-select">模型</label><select id="model-select"></select></div><button class="form-button" id="fetch-models-btn">拉取模型</button>
+            <div id="api-settings-screen" class="screen"><div class="header"><span class="back-btn" onclick="showScreen('home-screen')">‹</span><span>API 设置</span><span style="width: 30px;"></span></div><div class="form-container"><p style="font-size: 14px; color: #666; background-color: #f0f0f0; padding: 10px; border-radius: 8px;">提示: 若要使用“发送图片”功能, 请务必选择支持Vision(视觉)的模型, 如<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4o</code>或<code style="background-color: #e0e0e0; padding: 2px 4px; border-radius: 4px;">gpt-4-vision-preview</code>。</p><div class="form-group"><label for="proxy-url">反代地址 (不需要添加/v1噢~)</label><input type="text" id="proxy-url" placeholder="例如: https://api.openai.com"></div><div class="form-group"><label for="api-key">密钥 (直连轮询用英文逗号隔开)</label><input type="password" id="api-key" placeholder="sk-..."></div><div class="form-group"><label for="model-select">模型</label><select id="model-select"></select></div>
+<!-- ▼▼▼ 请将这段【全新的HTML代码】粘贴到 “模型” 下拉框的 form-group 之后 ▼▼▼ -->
+<div class="form-group">
+    <label>API 预设</label>
+    <div class="bubble-preset-manager"> <!-- 复用现有样式 -->
+        <select id="api-preset-select" class="form-group select"></select>
+        <button id="manage-api-presets-btn" class="action-btn">管理</button>
+    </div>
+</div>
+<!-- ▲▲▲ 新代码粘贴结束 ▲▲▲ -->
+<button class="form-button" id="fetch-models-btn">拉取模型</button>
 
 <!-- ▼▼▼ 将这段代码粘贴到 API 设置页面的“保存设置”按钮上方 ▼▼▼ -->
 <hr style="margin:20px 0; opacity:.3">
@@ -4601,10 +5266,17 @@ input:checked + .slider:before {
     <span id="cancel-reply-btn">×</span>
 </div>
         <div id="chat-input-actions-top">
-            <button id="open-sticker-panel-btn" class="chat-action-icon-btn action-button" title="表情面板">+</button>
+            <button id="open-sticker-panel-btn" class="chat-action-icon-btn action-button" title="表情面板"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+</svg></button>
             <button id="send-photo-btn" class="chat-action-icon-btn action-button" title="发送照片"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
-            <button id="upload-image-btn" class="chat-action-icon-btn action-button" title="上传图片"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--text-primary);"><path d="M21 3.5H3C2.44772 3.5 2 3.94772 2 4.5V19.5C2 20.0523 2.44772 20.5 3 20.5H21C21.5523 20.5 22 20.0523 22 19.5V4.5C22 3.94772 21.5523 3.5 21 3.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 13.5C17.6046 13.5 18.5 12.6046 18.5 11.5C18.5 10.3954 17.6046 9.5 16.5 9.5C15.3954 9.5 14.5 10.3954 14.5 11.5C14.5 12.6046 15.3954 13.5 16.5 13.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 14.5L18 10.5L10.3333 18.5M12.5 16L9 12.5L2 19.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <button id="transfer-btn" class="chat-action-icon-btn action-button" title="转账">￥</button>
+            <button id="upload-image-btn" class="chat-action-icon-btn action-button" title="上传图片"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" ><path d="M21 3.5H3C2.44772 3.5 2 3.94772 2 4.5V19.5C2 20.0523 2.44772 20.5 3 20.5H21C21.5523 20.5 22 20.0523 22 19.5V4.5C22 3.94772 21.5523 3.5 21 3.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 13.5C17.6046 13.5 18.5 12.6046 18.5 11.5C18.5 10.3954 17.6046 9.5 16.5 9.5C15.3954 9.5 14.5 10.3954 14.5 11.5C14.5 12.6046 15.3954 13.5 16.5 13.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 14.5L18 10.5L10.3333 18.5M12.5 16L9 12.5L2 19.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<button id="transfer-btn" class="chat-action-icon-btn action-button" title="转账">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 4L12 12L17 4M12 12V20M8 10H16M8 13H16"></path>
+</svg>
+</button>
             <button id="voice-message-btn" class="chat-action-icon-btn action-button" title="发送语音"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v4"/><path d="M8 23h8"/></svg></button>
 <!-- ▼▼▼ 将这行新代码粘贴到“发送语音”按钮的后面 ▼▼▼ -->
 <button id="send-waimai-request-btn" class="chat-action-icon-btn action-button" title="发起外卖请求"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button>
@@ -4726,7 +5398,25 @@ input:checked + .slider:before {
         <span style="width: 30px;"></span>
     </div>
     <div class="form-container">
-        <!-- 壁纸设置部分保持不变 -->
+        <!-- 锁屏壁纸设置 (全新) -->
+        <div style="width:100%; text-align: left; margin-bottom: 5px;">
+            <label style="font-weight: 500; color: var(--text-secondary);">锁屏设置</label>
+        </div>
+        <div id="lockscreen-wallpaper-preview" class="wallpaper-preview">点击下方上传</div>
+        <button class="form-button" onclick="document.getElementById('lockscreen-wallpaper-upload-input').click();">上传锁屏壁纸</button>
+        <input type="file" id="lockscreen-wallpaper-upload-input" accept="image/*" hidden>
+        
+        <div class="form-group" style="width: 100%; margin-top: 15px;">
+            <label for="password-set-input">锁屏密码 (留空则无密码)</label>
+            <input type="text" id="password-set-input" placeholder="设置你的解锁密码">
+        </div>
+        
+        <hr style="width: 80%; opacity: 0.3; margin: 20px 0;">
+
+        <!-- 主屏幕壁纸设置 (原有) -->
+        <div style="width:100%; text-align: left; margin-bottom: 5px;">
+            <label style="font-weight: 500; color: var(--text-secondary);">主屏幕设置</label>
+        </div>
         <div id="wallpaper-preview">点击下方上传</div>
         <button class="form-button" onclick="document.getElementById('wallpaper-upload-input').click();">上传壁纸</button>
         <input type="file" id="wallpaper-upload-input" accept="image/*">
@@ -4740,6 +5430,40 @@ input:checked + .slider:before {
     </label>
 </div>
 <!-- ▲▲▲ 替换结束 ▲▲▲ -->
+
+    <!-- === ▼▼▼ 以下是新增的美化功能UI ▼▼▼ === -->
+    <div style="width:100%; text-align: left; margin-bottom: 15px;">
+        <label style="font-weight: 500; color: var(--text-secondary);">手机美化 (CSS)</label>
+    </div>
+
+    <!-- 主题选择和管理 -->
+    <div class="form-group">
+        <label for="theme-selector">选择已存方案</label>
+        <div style="display: flex; gap: 10px;">
+            <select id="theme-selector" style="flex-grow: 1;"></select>
+            <button id="rename-theme-btn" class="form-button-secondary" style="margin:0; padding: 0 10px;">重命名</button>
+            <button id="delete-theme-btn" class="form-button-secondary" style="margin:0; padding: 0 10px; background-color: #ffdddd; color: #ff3b30;">删除</button>
+        </div>
+    </div>
+
+    <!-- CSS 代码编辑区 -->
+    <div class="form-group">
+        <label for="theme-css-editor">美化代码编辑区</label>
+        <textarea id="theme-css-editor" rows="10" style="font-family: monospace; font-size: 12px; resize: vertical;" placeholder="在这里粘贴或编辑美化代码..."></textarea>
+    </div>
+    
+    <!-- 操作按钮 -->
+    <button id="apply-theme-btn" class="form-button">应用当前代码</button>
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button id="save-theme-btn" class="form-button-secondary" style="flex:1;">保存当前方案</button>
+        <button id="save-as-new-theme-btn" class="form-button-secondary" style="flex:1;">另存为新方案</button>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button id="export-theme-btn" class="form-button-secondary" style="flex:1;">导出方案</button>
+        <button id="import-theme-btn" class="form-button-secondary" style="flex:1;">导入方案</button>
+        <input type="file" id="import-theme-input" accept=".json" hidden>
+    </div>
+    <!-- === ▲▲▲ 新增UI结束 ▲▲▲ === -->
         
         <!-- 【核心修改2】新增图标设置区域 -->
         <hr style="width: 80%; opacity: 0.3; margin: 30px 0;">
@@ -4749,6 +5473,17 @@ input:checked + .slider:before {
         <div id="icon-settings-grid">
             <!-- 图标设置项将由JS动态生成在这里 -->
         </div>
+
+<!-- ▼▼▼ 将这段新代码，粘贴到“保存所有外观设置”按钮的【上方】 ▼▼▼ -->
+<hr style="width: 80%; opacity: 0.3; margin: 30px 0;">
+<div style="width:100%; text-align: left; margin-bottom: 15px;">
+    <label style="font-weight: 500; color: var(--text-secondary);">铃声设置</label>
+</div>
+<div class="form-group" style="width: 100%;">
+    <label for="ringtone-url-input">来电铃声 URL (.mp3, .wav, etc.)</label>
+    <input type="text" id="ringtone-url-input" placeholder="输入音频文件的网络链接...">
+</div>
+<!-- ▲▲▲ 新代码粘贴结束 ▲▲▲ -->
         
         <!-- 【核心修改3】按钮文字也改一下 -->
         <button class="form-button" id="save-wallpaper-btn" style="margin-top: 30px;">保存所有外观设置</button>
@@ -4900,6 +5635,62 @@ input:checked + .slider:before {
 </div>
 <!-- ▲▲▲ 新HTML粘贴结束 ▲▲▲ -->
 
+<!-- ▼▼▼ 【全新】聊天记录搜索界面 ▼▼▼ -->
+<div id="chat-search-screen" class="screen">
+    <!-- 1. 界面头部 -->
+    <div class="header">
+        <span class="back-btn" id="search-back-btn">‹</span>
+        <span>查找聊天记录</span>
+        <span style="width: 30px;"></span> <!-- 占位符，保持标题居中 -->
+    </div>
+
+    <!-- 2. 搜索控制区域 -->
+<div id="search-controls" style="padding: 15px; border-bottom: 1px solid var(--border-color);">
+    <div class="form-group">
+        <label for="keyword-search-input">关键词</label>
+        <input type="search" id="keyword-search-input" placeholder="输入关键词搜索..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+    </div>
+    <!-- 核心修改：移除了包裹它们的flex div，让它们自然地垂直排列 -->
+    <div class="form-group">
+        <label for="sender-search-select">人物</label>
+        <select id="sender-search-select" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <!-- 成员选项将由JS动态生成 -->
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="date-search-input">日期</label>
+        <input type="date" id="date-search-input" style="width: 95%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+    </div>
+</div>
+
+    <!-- 3. 搜索结果列表 -->
+    <div id="search-results-list" class="list-container" style="overflow-y: auto; padding-top: 10px;">
+        <!-- 搜索结果将由JS动态生成在这里 -->
+    </div>
+</div>
+<!-- ▲▲▲ 新界面HTML结束 ▲▲▲ -->
+
+            <!-- ▼▼▼ 请将下面这整块【全新的HTML代码】粘贴到这里 ▼▼▼ -->
+            <div id="lock-screen" class="screen">
+                <div id="lock-clock-container">
+                    <div id="lock-main-time">12:00</div>
+                    <div id="lock-main-date">星期一, 1月1日</div>
+                </div>
+                <div id="unlock-hint">向上轻扫以解锁</div>
+            </div>
+
+            <div id="password-modal-overlay" class="modal">
+                <div class="password-modal-content">
+                    <p>请输入密码</p>
+                    <input type="password" id="password-input-field" maxlength="20">
+                    <div class="password-actions">
+                        <button id="password-cancel-btn">取消</button>
+                        <button id="password-confirm-btn">进入</button>
+                    </div>
+                </div>
+            </div>
+            <!-- ▲▲▲ 新HTML代码粘贴结束 ▲▲▲ -->
+
         </div>
     </div>
   
@@ -4930,7 +5721,10 @@ input:checked + .slider:before {
                 </div>
             </div>
             <div class="form-group" id="ai-persona-group"><label for="ai-persona">对方人设 (AI Persona)</label><textarea id="ai-persona" rows="3"></textarea></div><div class="form-group" id="ai-avatar-group"><label>对方头像</label><div class="avatar-upload"><img id="ai-avatar-preview"><button onclick="document.getElementById('ai-avatar-input').click()">上传对方头像</button><button id="manage-ai-avatar-library-btn">管理头像库</button>
-<input type="file" id="ai-avatar-input" accept="image/*"></div></div><div class="form-group" id="my-persona-group"><label for="my-persona">我的人设 (My Persona)</label><textarea id="my-persona" rows="3"></textarea></div><div class="form-group" id="my-avatar-group"><label>我的头像</label><div class="avatar-upload"><img id="my-avatar-preview"><button onclick="document.getElementById('my-avatar-input').click()">上传我的头像</button><button id="open-persona-library-btn">预设</button><input type="file" id="my-avatar-input" accept="image/*"></div></div><div class="form-group" id="group-members-group"><label>群成员人设</label><div id="group-members-settings"></div>
+<button class="change-frame-btn" data-type="ai">更换头像框</button> <!-- ← 加回这一行 -->
+<input type="file" id="ai-avatar-input" accept="image/*"></div></div><div class="form-group" id="my-persona-group"><label for="my-persona">我的人设 (My Persona)</label><textarea id="my-persona" rows="3"></textarea></div><div class="form-group" id="my-avatar-group"><label>我的头像</label><div class="avatar-upload"><img id="my-avatar-preview"><button onclick="document.getElementById('my-avatar-input').click()">上传我的头像</button>
+<button class="change-frame-btn" data-type="my">更换头像框</button> <!-- ← 加回这一行 -->
+<button id="open-persona-library-btn">预设</button><input type="file" id="my-avatar-input" accept="image/*"></div></div><div class="form-group" id="group-members-group"><label>群成员人设</label><div id="group-members-settings"></div>
 
     <!-- 【新增】管理成员按钮 -->
     <button id="manage-members-btn" class="form-button form-button-secondary" style="margin-top: 15px;">管理群成员</button></div>
@@ -4942,6 +5736,16 @@ input:checked + .slider:before {
     <input type="range" id="font-size-slider" min="12" max="20" step="1" value="13" style="width: 100%; margin-top: 8px;">
 </div>
 <!-- ▲▲▲ 新代码粘贴结束 ▲▲▲ -->
+
+<!-- ▼▼▼ 【全新】气泡样式预设选择器 ▼▼▼ -->
+<div class="form-group">
+    <label>气泡样式预设</label>
+    <div class="bubble-preset-manager">
+        <select id="bubble-style-preset-select" class="form-group select"></select>
+        <button id="manage-bubble-presets-btn" class="action-btn">管理</button>
+    </div>
+</div>
+<!-- ▲▲▲ 新HTML粘贴结束 ▲▲▲ -->
 
 <!-- ▼▼▼ 请将这段新代码粘贴到“聊天字体大小”的 form-group 之后 ▼▼▼ -->
 <div class="form-group">
@@ -4978,11 +5782,16 @@ input:checked + .slider:before {
             </div>
 <hr style="margin: 25px 0; border: none; border-top: 1px solid #eee;">
 <button class="form-button form-button-secondary" id="block-chat-btn" style="background-color: #ff3b30; color: white; border-color: #ff3b30;">拉黑对方</button>
+<!-- ▼▼▼ 把这段新代码粘贴到“清空聊天记录”按钮的上方 ▼▼▼ -->
+<button class="form-button form-button-secondary" id="find-history-btn">查找聊天记录</button>
+<!-- ▲▲▲ 新代码粘贴结束 ▲▲▲ -->
 <button class="form-button form-button-secondary" id="clear-chat-btn">清空聊天记录</button></div><div class="modal-footer"><button class="cancel" id="cancel-chat-settings-btn">取消</button><button class="save" id="save-chat-settings-btn">保存</button></div></div></div>
     
     <div id="persona-library-modal" class="modal"><div class="modal-content"><div class="modal-header"><span>我的人设库</span><button id="add-persona-preset-btn" class="action-button">添加</button></div><div class="modal-body"><div id="persona-library-grid"></div></div><div class="modal-footer"><button class="cancel" id="close-persona-library-btn">关闭</button></div></div></div>
     
-    <div id="persona-editor-modal" class="modal"><div class="modal-content"><div class="modal-header"><span id="persona-editor-title">添加人设预设</span></div><div class="modal-body"><div class="form-group"><label>预设头像</label><div class="avatar-upload"><img id="preset-avatar-preview"><button onclick="document.getElementById('preset-avatar-input').click()">上传头像</button><input type="file" id="preset-avatar-input" accept="image/*"></div></div><div class="form-group"><label for="preset-persona-input">预设人设</label><textarea id="preset-persona-input" rows="4" placeholder="在此输入这个人设的详细设定..."></textarea></div></div><div class="modal-footer"><button class="cancel" id="cancel-persona-editor-btn">取消</button><button class="save" id="save-persona-preset-btn">保存</button></div></div></div>
+    <div id="persona-editor-modal" class="modal"><div class="modal-content"><div class="modal-header"><span id="persona-editor-title">添加人设预设</span></div><div class="modal-body"><div class="form-group"><label>预设头像</label><div class="avatar-upload"><img id="preset-avatar-preview"><button onclick="document.getElementById('preset-avatar-input').click()">上传头像</button>
+    <button class="change-frame-btn" data-type="member">更换头像框</button> <!-- ← 加回这一行 -->
+<input type="file" id="preset-avatar-input" accept="image/*"></div></div><div class="form-group"><label for="preset-persona-input">预设人设</label><textarea id="preset-persona-input" rows="4" placeholder="在此输入这个人设的详细设定..."></textarea></div></div><div class="modal-footer"><button class="cancel" id="cancel-persona-editor-btn">取消</button><button class="save" id="save-persona-preset-btn">保存</button></div></div></div>
 
     <div id="member-settings-modal" class="modal"><div class="modal-content"><div class="modal-header"><span>编辑群成员</span></div><div class="modal-body">
     <div class="form-group"><label for="member-name-input">名字</label><input type="text" id="member-name-input"></div>
@@ -5037,6 +5846,7 @@ input:checked + .slider:before {
 </div>
 
     <audio id="audio-player" style="display:none;"></audio>
+<audio id="ringtone-player" loop></audio>
 
 <!-- ▼▼▼ 用下面这段【完整】的模态框代码，替换掉你现有的 id="create-post-modal" 的整个 div ▼▼▼ -->
 <div id="create-post-modal" class="modal">
@@ -5219,7 +6029,7 @@ input:checked + .slider:before {
             </div>
             <div class="form-group">
                 <label for="countdown-date-input">约定日期与时间</label>
-                <input type="datetime-local" id="countdown-date-input">
+                <input type="datetime-local" id="countdown-date-input"style="width: 95%; padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
             </div>
         </div>
         <div class="modal-footer">
@@ -5481,6 +6291,47 @@ input:checked + .slider:before {
 </div>
 <!-- ▲▲▲ 新HTML粘贴结束 ▲▲▲ -->
 
+<!-- ▼▼▼ 【全新】自定义头像框管理模态框 ▼▼▼ -->
+<div id="custom-frame-manager-modal" class="modal">
+    <div class="modal-content" style="height: 70%;">
+        <div class="modal-header">
+            <span>管理我的头像框</span>
+            <button id="upload-custom-frame-btn" class="action-button">上传</button>
+        </div>
+        <div class="modal-body" style="padding: 15px;">
+            <div id="custom-frame-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 15px;">
+                <!-- 自定义头像框将由JS动态生成在这里 -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="save" id="close-frame-manager-btn" style="width: 100%;">关闭</button>
+        </div>
+    </div>
+</div>
+<input type="file" id="custom-frame-upload-input" accept="image/png, image/gif" hidden>
+<!-- ▲▲▲ 新HTML粘贴结束 ▲▲▲ -->
+
+<!-- ▼▼▼ 【已修改】头像框选择模态框 ▼▼▼ -->
+<div id="avatar-frame-modal" class="modal">
+    <div class="modal-content" style="height: 70%;">
+        <div class="modal-header">
+            <span>选择头像框</span>
+            <!-- 【核心修改】我们在这里加一个“管理”按钮 -->
+            <button id="manage-custom-frames-btn" class="action-button">管理</button>
+        </div>
+        <div class="modal-body" style="padding: 15px;">
+            <!-- 【核心修改】不再需要Tabs，只有一个Grid -->
+            <div id="avatar-frame-grid" class="frame-grid">
+                <!-- 头像框选项（包括“无”和自定义的）会在这里生成 -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="cancel" id="cancel-frame-settings-btn">取消</button>
+            <button class="save" id="save-frame-settings-btn">保存</button>
+        </div>
+    </div>
+</div>
+
 <script>
 
         const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models'
@@ -5696,9 +6547,19 @@ if(Array.isArray(res) && res.length > 1) {
         // 1. 所有变量和常量定义
         // ===================================================================
         const db = new Dexie('GeminiChatDB');
+// ▼▼▼ 在这里添加您的 API 站点黑名单 ▼▼▼
+const BLOCKED_API_SITES = [
+    'api.pisces.ink',
+    'aiapi.qzz.io'
+];
+// ▲▲▲ 黑名单定义结束 ▲▲▲
         // --- 已修正 ---
         let state = { chats: {}, activeChatId: null, globalSettings: {}, apiConfig: {}, userStickers: [], worldBooks: [], personaPresets: [], qzoneSettings: {}, activeAlbumId: null };
         // --- 修正结束 ---
+
+        let isLocked = false; // <-- 在这里添加这行新代码
+        let newLockscreenWallpaperBase64 = null; // <-- 在这里添加这行新代码
+
 let musicState = { 
     isActive: false, 
     activeChatId: null, 
@@ -5739,11 +6600,218 @@ let activePostId = null; // <-- 新增：用于存储当前操作的动态ID
 
 let simulationIntervalId = null;
 
+let currentFrameSelection = { type: null, url: '', target: null }; 
+
         const defaultAvatar = 'https://i.postimg.cc/PxZrFFFL/o-o-1.jpg';
         const defaultMyGroupAvatar = 'https://i.postimg.cc/cLPP10Vm/4.jpg';
         const defaultGroupMemberAvatar = 'https://i.postimg.cc/VkQfgzGJ/1.jpg';
         const defaultGroupAvatar = 'https://i.postimg.cc/gc3QYCDy/1-NINE7-Five.jpg';
         let notificationTimeout;
+
+const THEME_CSS_TEMPLATE = `
+/* 
+  EPhone 美化代码模板
+  使用方法: 
+  1. 修改下面的颜色代码或图片URL。
+  2. 不需要修改的部分可以删除或保持不变。
+  3. 颜色代码格式为 #RRGGBB (例如 #FFFFFF 是白色)。
+  4. 图片URL需要是网络直链。
+*/
+
+/* === 1. 手机壳与刘海颜色 === */
+#phone-frame {
+  background-color: #f0f0f0; /* 手机壳颜色 */
+}
+.notch {
+  background-color: #1a1a1a; /* 顶部“刘海”颜色 */
+}
+        #clock-container {  color: white;  }
+
+/* === 1.5. 全局主题色 (重要！) === */
+/* 这个颜色决定了大部分按钮、链接和高亮文本的颜色。*/
+:root {
+  --accent-color: #007bff; /* 默认是蓝色 */
+}
+
+/* === 2. 聊天界面顶部和底部的图片按钮替换 === */
+/* “一起听”按钮 (正常状态) */
+#listen-together-btn img[src*="8kYShvrJ/90-UI-2.png"] {
+  content: url('在这里粘贴你的“正常状态”图片URL');
+}
+/* “一起听”按钮 (播放中状态) */
+#listen-together-btn img[src*="D0pq6qS2/E30078-DC-8-B99-4-C01-AFDA-74728-DBF7-BEA.png"] {
+  content: url('在这里粘贴你的“播放中”图片URL');
+}
+/* “聊天设置”按钮 */
+#chat-settings-btn img {
+  content: url('https://i.postimg.cc/bvPq64cv/CCA834-BA-5-A90-408-D-94-FA-7-EE156-B6-A765.png');
+}
+/* “触发API回复”按钮 */
+#wait-reply-btn img {
+  content: url('https://i.postimg.cc/q72zq80N/ECE92-BBC-BE57-48-E9-BB2-C-345-B6019-C4-B2.png');
+}
+/* “发送”按钮 (设为图片形式) */
+#send-btn {
+  background-image: url('在这里粘贴你的发送按钮图片URL');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 50px; /* 根据你的图片调整宽度 */
+}
+
+/* === 3. 顶部栏与底部栏颜色 === */
+.header, .qzone-header {
+  background-color: rgba(240, 240, 240, 0.8); /* 顶部栏背景色 (带一点透明) */
+  color: #333333; /* 顶部栏文字颜色 */
+}
+#chat-list-bottom-nav {
+  background-color: rgba(245, 245, 245, 0.85); /* 底部导航栏背景色 */
+}
+.nav-item {
+  color: #8a8a8a; /* 底部导航栏未选中项的颜色 */
+}
+.nav-item.active {
+  color: #007bff; /* 底部导航栏选中项的颜色 */
+}
+
+/* === 4. 各界面背景色 === */
+#chat-list-screen, #qzone-screen .qzone-content, #memories-view {
+  background-color: #f0f2f5 !important; /* 列表页主背景色 */
+}
+
+/* === 5. 聊天输入区底部功能栏SVG图标替换 === */
+/* 提示: 你需要将你的SVG代码转换为URL编码格式。
+   可以使用在线工具搜索 "SVG to Data URI" 来完成转换。
+   然后替换掉下面的 url('...') 部分。 */
+
+.chat-action-icon-btn {
+  background-color: rgba(255, 255, 255, 0.5); /* 图标按钮的背景色 */
+  border: 1px solid rgba(0,0,0,0.05); /* 图标按钮的边框 */
+}
+
+/* 表情面板(+)按钮 */
+#open-sticker-panel-btn svg { display: none; /* 隐藏原始SVG */ }
+#open-sticker-panel-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 发送照片(旧)按钮 */
+#send-photo-btn svg { display: none; /* 隐藏原始SVG */ }
+#send-photo-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 上传图片(新)按钮 */
+#upload-image-btn svg { display: none; }
+#upload-image-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: black;"><path d="M21 3.5H3C2.44772 3.5 2 3.94772 2 4.5V19.5C2 20.0523 2.44772 20.5 3 20.5H21C21.5523 20.5 22 20.0523 22 19.5V4.5C22 3.94772 21.5523 3.5 21 3.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 13.5C17.6046 13.5 18.5 12.6046 18.5 11.5C18.5 10.3954 17.6046 9.5 16.5 9.5C15.3954 9.5 14.5 10.3954 14.5 11.5C14.5 12.6046 15.3954 13.5 16.5 13.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 14.5L18 10.5L10.3333 18.5M12.5 16L9 12.5L2 19.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 转账(￥)按钮 */
+#transfer-btn svg { display: none; }
+#transfer-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L12 12L17 4M12 12V20M8 10H16M8 13H16"></path></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 语音按钮 */
+#voice-message-btn svg { display: none; }
+#voice-message-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v4"/><path d="M8 23h8"/></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 外卖按钮 */
+#send-waimai-request-btn svg { display: none; }
+#send-waimai-request-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 视频通话按钮 */
+#video-call-btn svg { display: none; }
+#video-call-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 群视频通话按钮 */
+#group-video-call-btn svg { display: none; }
+#group-video-call-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 投票按钮 */
+#send-poll-btn svg { display: none; }
+#send-poll-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h10"/><path d="M6 6h.01"/><path d="M8 12h10"/><path d="M6 12h.01"/><path d="M8 18h10"/><path d="M6 18h.01"/></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 分享链接按钮 */
+#share-link-btn svg { display: none; }
+#share-link-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg>');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* === 6. 更多界面背景色 === */
+/* 适用于所有设置、编辑、选择等二级页面 */
+#api-settings-screen,
+#font-settings-screen,
+#wallpaper-screen,
+#world-book-screen,
+#world-book-editor-screen,
+#contact-picker-screen,
+#member-management-screen,
+#album-screen,
+#album-photos-screen,
+#call-history-screen,
+#chat-search-screen,
+#browser-screen {
+  background-color: #FAFAFA !important;
+}
+
+/* === 7. 回忆卡片美化 === */
+.memory-card {
+  background-color: #fffaf0 !important; /* 卡片主背景色 */
+  border-left-color: #ffb74d !important; /* 左侧装饰条颜色 */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07) !important;
+}
+.memory-card .header .author {
+  color: #d98100 !important; /* 作者/标题文字颜色 */
+}
+.memory-card .header .date {
+  color: #a1887f !important; /* 日期文字颜色 */
+}
+.memory-card .content {
+  color: #5d4037 !important; /* 内容文字颜色 */
+}
+`;
 
 // ▼▼▼ 在JS顶部，变量定义区，添加这个新常量 ▼▼▼
 const DEFAULT_APP_ICONS = {
@@ -5771,6 +6839,260 @@ const DEFAULT_APP_ICONS = {
         const modalConfirmBtn = document.getElementById('custom-modal-confirm');
         const modalCancelBtn = document.getElementById('custom-modal-cancel');
         let modalResolve;
+
+// ▼▼▼ 把这【一整块】全新的代码，粘贴到 <script> 标签内的【变量定义区域】的末尾 ▼▼▼
+
+const avatarFrames = [
+    { id: 'none', url: '', name: '无' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/fLDnz5Pn/IMG-5574.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/HxH3cNHz/IMG-6871.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/jCVK0fGL/IMG-6890.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/85Zsyjwn/IMG-6895.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/cJtpZCB3/IMG-6894.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/63sDQKMm/IMG-6893.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/cHQPgzj4/IMG-6888.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/dVLXm3Xf/IMG-6885.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/kGsZwbq0/IMG-6886.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/63NmX03s/IMG-4366.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/zvz2LGK0/IMG-4367.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/prsGKMBx/IMG-4370.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/gk0BmrY0/IMG-4371.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/fRt2SFSn/IMG-4368.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/kGgwJhPH/IMG-4374.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/PrcKH436/IMG-4376.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/fRV86FMq/IMG-4381.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/HsyqMVyk/IMG-4385.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/qBbKK7dS/IMG-4386.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/05wnd389/IMG-4388.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/RZNLhbbr/IMG-4389.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/fLTc42dg/IMG-4391.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/FzbGNdRT/IMG-4392.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/XY63sTS3/IMG-4393.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/Cx9vCVWH/IMG-4395.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/kMfPQBwQ/IMG-4396.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/CLrZQMMD/IMG-4398.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/L4zwDhTC/IMG-4399.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/yN3s8szM/IMG-4400.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/59Cn1tkB/IMG-4401.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/g0s1V0PX/IMG-4402.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/Jn1DFPgY/IMG-4403.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/q7cQnDy1/IMG-4404.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/RFK3q2t0/IMG-4407.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/gcV0VR2t/IMG-4408.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/W1CjLb4J/IMG-4409.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/Ss7pM6fW/IMG-4410.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/nrFfYX3N/IMG-4412.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/cHWp0KG6/IMG-4413.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/4yNjHrdg/IMG-4414.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/hPX5F8Qp/IMG-4415.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/vHCSG1WM/IMG-4416.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/x1Hp80Rm/IMG-4417.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/FHRcCGfH/IMG-4418.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/13hhJ77p/IMG-4419.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/J4WCQd2j/IMG-4420.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/Dydkpd9H/IMG-4421.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/mrkvDxPW/IMG-4422.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/76Tj3g1B/IMG-4425.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/3N5Vndn3/IMG-4426.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/05DLr0yj/IMG-4427.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/GhR6DT4Q/IMG-4428.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/fRTF24jS/IMG-4430.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/R0WYmcYM/IMG-4431.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/nrJSqNhz/IMG-4432.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/tC9mJ0cv/IMG-4438.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/XNkQTHvf/IMG-5561.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/Mpv5fzm5/IMG-4439.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/T1tjhsyB/IMG-4720.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/c4JMPd2W/IMG-4724.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/g2XykNGB/IMG-4727.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/y8MmJcd6/IMG-4728.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/Lsjzj5Yt/IMG-4729.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/bNdk33SN/IMG-4893.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/4x9tTy1D/IMG-5563.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/DZshzKv6/IMG-5576.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/Fsvr71JL/IMG-5573.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/Fz3HwLk9/IMG-5569.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/wjH180kn/IMG-5566.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/MG6qtLYK/IMG-5565.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/CKgDNYVb/IMG-5577.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/hj4dkrvj/IMG-5578.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/hj4dkrvj/IMG-5578.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/C5XnfpNB/IMG-5579.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/4y7mGFgJ/IMG-5716.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/FzM1Hgr0/IMG-5717.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/rF4KYbjj/IMG-5720.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/6pLTBvDG/IMG-5721.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/VNK6Ccsf/IMG-5722.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/wx72fhr2/IMG-5968.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/QdrqdvdY/IMG-5969.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/0yd0MZ6k/IMG-5971.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/1zmcp66p/IMG-5973.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/wBw5Fvcn/IMG-5974.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/R0pfKYvB/IMG-5976.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/9fQZ425b/IMG-5975.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/v8V9xXjJ/IMG-6137.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/WbmkXzsS/IMG-6138.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/Dw2bDhZh/IMG-6140.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/ZqQBCyLY/IMG-6144.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/qRCtnMms/IMG-6145.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/1Rwn3XVP/IMG-6146.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/Kv51tW5H/IMG-6147.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/nhcC21Rc/IMG-6148.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/fTWzQRx8/IMG-6149.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/LXyyqDbY/IMG-6294.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/7Zgm1wRy/IMG-6295.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/5tbpnDcQ/IMG-6296.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/YSRRV8kn/IMG-6297.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/k45sd8gn/IMG-6375.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/50k390X8/IMG-6376.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/90RBDh9K/IMG-6377.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/cCpBYbMH/IMG-6552.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/Pf9g2fSL/IMG-6554.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/gkhf597g/IMG-6555.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/g2PfbSFm/IMG-6556.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/pLY3WfR8/IMG-6557.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/65Cmcr7S/IMG-6559.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/Y94XWYKd/IMG-6560.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/ydwLXx7s/IMG-6562.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/G3y73Fj2/IMG-6563.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/TYvkKKkc/IMG-6565.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/GmcqjZn8/IMG-6566.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/k5Gs0K47/IMG-6567.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/XJy8JWdh/IMG-6568.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/fycfcvHf/IMG-6569.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/J7ZxC11H/IMG-6570.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/hPnrSHjy/IMG-4434.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/YqxxjbLp/IMG-6572.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/wjfcQMkZ/IMG-6573.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/Vv8jkCYr/IMG-6574.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/MZ77rdDy/IMG-6850.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/T3NvqJCZ/IMG-6851.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/28TsrxRV/IMG-6852.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/VkV2bLNw/IMG-6853.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/gJ95NSRB/IMG-6854.gif', name: '14' }, 
+    { id: 'frame_cat_ear', url: 'https://i.postimg.cc/d1qsQsbQ/IMG-6855.gif', name: '1' }, 
+    { id: 'frame_ribbon', url: 'https://i.postimg.cc/gJNYx9pV/IMG-6856.gif', name: '2' }, 
+    { id: 'frame_flower', url: 'https://i.postimg.cc/fyPDvxJk/IMG-6860.gif', name: '3' }, 
+    { id: 'frame_tech', url: 'https://i.postimg.cc/QMDsSNxg/IMG-6861.gif', name: '4' }, 
+    { id: 'frame_5', url: 'https://i.postimg.cc/vBqsQW7X/IMG-6858.gif', name: '5' }, 
+    { id: 'frame_6', url: 'https://i.postimg.cc/Y0vwjhb7/IMG-6857.gif', name: '6' }, 
+    { id: 'frame_7', url: 'https://i.postimg.cc/90sH9Cn7/IMG-6868.gif', name: '7' }, 
+    { id: 'frame_8', url: 'https://i.postimg.cc/Y2PHZzCC/IMG-6866.gif', name: '8' }, 
+    { id: 'frame_9', url: 'https://i.postimg.cc/7Z8yYP7v/IMG-6889.gif', name: '9' }, 
+    { id: 'frame_10', url: 'https://i.postimg.cc/nryNzTXK/IMG-6915.gif', name: '10' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/Qx5dqyJ3/IMG-6917.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/Wbr0JSDD/IMG-5316.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/tgR6wjBP/IMG-5570.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/d0WCKxff/IMG-6932.gif', name: '14' }, 
+    { id: 'frame_11', url: 'https://i.postimg.cc/Ss3znzk7/IMG-6934.gif', name: '11' }, 
+    { id: 'frame_12', url: 'https://i.postimg.cc/nrm9BcL8/IMG-6941.gif', name: '12' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/ZYvd1jxf/IMG-6937.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/sDFhySn3/IMG-6936.gif', name: '14' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/43PhvxRq/IMG-6922.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/3Rb46fRZ/IMG-6923.gif', name: '14' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/PJppkbvn/IMG-6918.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/XqRZNZ9G/IMG-6916.gif', name: '14' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/RVt6sRzc/IMG-6939.gif', name: '14' }, 
+    { id: 'frame_13', url: 'https://i.postimg.cc/mgGc0HbK/IMG-6926.gif', name: '13' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/P5zLh5JJ/IMG-6942.gif', name: '14' }, 
+    { id: 'frame_14', url: 'https://i.postimg.cc/xCqqKGRN/IMG-6929.gif', name: '14' },
+    { id: 'frame_12', url: 'https://i.postimg.cc/7LSRp4hx/e7fa949b9pc84cff0dabe57defceb54c.gif', name: '12' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/DZgMwc1H/817178fdbpf2ff7740dc98e26ab78759.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/3NffgJSZ/e09c07034ld7e62266c0a5de6a36ae62.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/vHDNGfT2/35ac7f372v588bf48d4f659077196b85.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/KvVsjjgG/3c3aa5219s18b90187ef1f54b3db7ba8.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/k5P1NHcL/55f3e31d8qbc8a02d152b07b99d31567.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/FFCTCzpy/641bad3b3udc599fdb63ca75fde427e5.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/8k7YSLjK/1689aa46aqc4b9ffc0f970e668f56537.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/J0CZSwyW/IMG-6938.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/Df1qLzDf/IMG-6927.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/CLNkrQSW/IMG-6925.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/y8p9s3Jj/IMG-6919.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/Lsr1Zd3Z/IMG-6928.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/Ssgbv41n/IMG-6876.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/SNByPrf9/IMG-7005.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/Z5nrCyS5/IMG-7006.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/mDfMXXFP/IMG-7007.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/DZrGtrqB/IMG-7008.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/ZnJNZWHZ/IMG-7009.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/RhGH0vpt/IMG-7010.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/tRzPkzRg/IMG-7012.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/wTTNGs3Q/IMG-7013.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/3JSG5Jv5/IMG-7014.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/rwDr8X1d/IMG-7015.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/DzDy2vS7/IMG-7017.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/QMVdG9x6/IMG-7016.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/mZ9hgH3J/IMG-7019.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/t4ksHGdg/IMG-7020.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/hP9JpdfT/IMG-7023.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/wTKyXVT9/IMG-7024.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/ZqjKXPSv/IMG-7025.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/gj3Tmqz5/mmexport1751030241029.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/4yCXW52F/mmexport1751030908335.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/VkXngG72/mmexport1751031208329.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/LscBkxZb/mmexport1751017556565.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/1XqzGKwJ/mmexport1751018282681.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/8kHCQwbQ/mmexport1751020645824.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/HWynLK7f/mmexport1751021724230.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/JnwFp3Kx/mmexport1751031208329.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/HLZNWkQw/mmexport1751031767634.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/vH2X6N1y/mmexport1751032231179.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/NFS4ZyvM/mmexport1751032686953.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/3RpmWc8c/mmexport1751033102811.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/L5RLr3tg/mmexport1751035976943.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/4NCPsp5d/mmexport1751034427637.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/CMv02LHm/mmexport1751034842120.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/rFnSzWGx/mmexport1751035618517.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/7YRbzN51/mmexport1751036276038.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/cJpbtPWq/mmexport1751036607799.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/HxLV5v92/mmexport1751036977582.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/D01rYy86/mmexport1751037965259.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/J4fwkTLW/mmexport1751038167142.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/xjpN4swz/IMG-7240.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/ZnzbGdxX/IMG-7239.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/DyYDmKtw/IMG-7238.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/W40f9qtd/IMG-7098.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/8PsK20jQ/IMG-7236.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/cHsTXDVz/IMG-7235.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/sXwm8Yzg/IMG-7234.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/xTk5xN49/IMG-7233.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/k5yv6QBv/IMG-7232.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/yx2m4nbs/IMG-7231.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/vZt0fFKn/IMB-r-HMBXY.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/pddJj9zN/IMG-7094.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/rmB17Qbc/IMB-f-VDf-Fc.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/VkKjzYTK/IMB-f4kk-CT.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/B6KD52vz/IMG-7096.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/9XPwWmwy/IMB-Kf7um-P.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/mrFhKBGz/IMB-e-QWBpa.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/bw4wxW2z/IMB-16r-COL.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/3x0Kx1fz/IMB-K1u-Jp-P.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/CLz0cJ0d/IMG-7116.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/fyyGgW61/IMG-7115.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/gkk7s0vD/IMG-6984.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/0NpZPgYj/IMG-6985.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/tTWKKmTN/IMG-7073.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/jS8tc9wW/IMG-7083.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/rmRVKJpD/IMG-7087.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/zvWGPjms/IMG-7090.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/YSkqDg8V/IMG-7092.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/FzqHTBng/IMG-7093.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/tTpZ6wLs/IMG-7095.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/8P5vt8sW/IMG-7097.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/wMxmCZVC/IMG-7099.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/2jxd0FGp/IMG-7100.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/B6T59xGK/IMG-7101.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/kXfcgFRN/IMG-7106.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/htZppbS4/IMG-7107.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/hPgyjtyn/IMG-7108.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/HLKvs0Kv/IMG-7109.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/wjwbnYkp/IMG-7111.gif', name: '14' },
+    { id: 'frame_13', url: 'https://i.postimg.cc/bJDMQVkj/IMG-7112.gif', name: '13' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/SNWBTP5S/IMG-7113.gif', name: '14' },
+    { id: 'frame_14', url: 'https://i.postimg.cc/jCVMQsKH/IMG-7114.gif', name: '14' },
+];
+
+// ▲▲▲ 粘贴结束 ▲▲▲
 
         function showCustomModal() { 
             modalOverlay.classList.add('visible'); 
@@ -5857,10 +7179,10 @@ function showCustomPrompt(title, placeholder, initialValue = '', type = 'text', 
         // 2. 数据库结构定义
         // ===================================================================
 
-db.version(23).stores({ 
-    chats: '&id, isGroup, groupId', 
+db.version(28).stores({ 
+    chats: '&id, isGroup, groupId, isPinned', // <-- 看这里，我们加了 isPinned 
     apiConfig: '&id', 
-    globalSettings: '&id', 
+    globalSettings: '&id, activeThemeId', 
     userStickers: '&id, url, name',
     worldBooks: '&id, name, categoryId', // <-- 【核心修改1】在这里添加 categoryId
     worldBookCategories: '++id, name',    // <-- 【核心修改2】新增这个表
@@ -5873,12 +7195,27 @@ db.version(23).stores({
     favorites: '++id, type, timestamp, originalTimestamp',
     qzoneGroups: '++id, name',
     memories: '++id, chatId, timestamp, type, targetDate' ,
-    callRecords: '++id, chatId, timestamp, customName' // <--【核心修改】在这里加上 customName
+    callRecords: '++id, chatId, timestamp, customName',
+    customAvatarFrames: '&id, name, url',   
+    themes: '++id, name, css',
+    apiPresets: '++id, name, proxyUrl, apiKey',
+    bubbleStylePresets: '++id, name, css' // <-- 【核心新增】在这里添加气泡预设的“抽屉”
 });
 
         // ===================================================================
         // 3. 所有功能函数定义
         // ===================================================================
+
+// 【辅助函数】获取事件的坐标
+function getEventCoords(e) {
+    // 如果是触摸事件，就从 e.touches[0] 获取
+    if (e.touches && e.touches[0]) {
+        return { x: e.touches[0].pageX, y: e.touches[0].pageY };
+    }
+    // 否则，就是鼠标事件，直接从 e 获取
+    return { x: e.pageX, y: e.pageY };
+}
+
 
         function showScreen(screenId) {
             if (screenId === 'chat-list-screen') {
@@ -6325,7 +7662,12 @@ async function exportBackup() {
             personaPresets, musicLibrary, qzoneSettings, qzonePosts,
             qzoneAlbums, qzonePhotos, favorites, qzoneGroups,
             memories,
-            worldBookCategories // <-- 【核心修改1】在这里添加新变量
+                worldBookCategories,
+    callRecords,
+    customAvatarFrames, 
+            themes,
+apiPresets,
+bubbleStylePresets
         ] = await Promise.all([
             db.chats.toArray(),
             db.worldBooks.toArray(),
@@ -6341,16 +7683,29 @@ async function exportBackup() {
             db.favorites.toArray(),
             db.qzoneGroups.toArray(),
                         db.memories.toArray(),
-            db.worldBookCategories.toArray() // <-- 【核心修改2】在这里添加对新表的读取
-        ]);
+            db.worldBookCategories.toArray(),
+    db.callRecords.toArray(),       
+    db.customAvatarFrames.toArray(),
+
+            db.themes.toArray(),
+
+db.apiPresets.toArray(),
+
+db.bubbleStylePresets.toArray()
+]);
 
         Object.assign(backupData, {
             chats, worldBooks, userStickers, apiConfig, globalSettings,
             personaPresets, musicLibrary, qzoneSettings, qzonePosts,
             qzoneAlbums, qzonePhotos, favorites, qzoneGroups,
             memories,
-            worldBookCategories // <-- 【核心修改3】将新数据添加到备份对象中
-        });
+                worldBookCategories,
+    callRecords,          
+    customAvatarFrames, 
+            themes,
+apiPresets,
+bubbleStylePresets
+});
         
         const blob = new Blob(
             [JSON.stringify(backupData, null, 2)], 
@@ -6403,7 +7758,12 @@ async function importBackup(file) {
             if (Array.isArray(data.qzonePhotos)) await db.qzonePhotos.bulkPut(data.qzonePhotos);
             if (Array.isArray(data.favorites)) await db.favorites.bulkPut(data.favorites);
             if (Array.isArray(data.qzoneGroups)) await db.qzoneGroups.bulkPut(data.qzoneGroups);
-            if (Array.isArray(data.memories)) await db.memories.bulkPut(data.memories); // 【核心修正】新增
+if (Array.isArray(data.memories)) await db.memories.bulkPut(data.memories);
+if (Array.isArray(data.apiPresets)) await db.apiPresets.bulkPut(data.apiPresets);
+if (Array.isArray(data.bubbleStylePresets)) await db.bubbleStylePresets.bulkPut(data.bubbleStylePresets);
+if (Array.isArray(data.callRecords)) await db.callRecords.bulkPut(data.callRecords);             // <--- 新增
+if (Array.isArray(data.customAvatarFrames)) await db.customAvatarFrames.bulkPut(data.customAvatarFrames); // <--- 新增
+            if (Array.isArray(data.themes)) await db.themes.bulkPut(data.themes);
 
             if (data.apiConfig) await db.apiConfig.put(data.apiConfig);
             if (data.globalSettings) await db.globalSettings.put(data.globalSettings);
@@ -6471,8 +7831,10 @@ async function loadAllDataFromDB() {
         musicLib,
         personaPresets,
         qzoneSettings,
-        initialFavorites // 将 initialFavorites 加入到解构赋值中
-    ] = await Promise.all([
+        initialFavorites,
+    apiPresets,
+bubbleStylePresets
+] = await Promise.all([
         db.chats.toArray(),
         db.apiConfig.get('main'),
         db.globalSettings.get('main'),
@@ -6481,8 +7843,9 @@ async function loadAllDataFromDB() {
         db.musicLibrary.get('main'),
         db.personaPresets.toArray(),
         db.qzoneSettings.get('main'),
-        db.favorites.orderBy('timestamp').reverse().toArray() // 确保这一行在 Promise.all 的数组参数内
-    ]);
+        db.favorites.orderBy('timestamp').reverse().toArray(),
+    db.apiPresets.toArray(),    db.bubbleStylePresets.toArray()
+]);
     // ▲▲▲ 【修改结束】 ▲▲▲
 
     state.chats = chatsArr.reduce((acc, chat) => {
@@ -6546,6 +7909,12 @@ async function loadAllDataFromDB() {
             chat.settings.linkedWorldBookIds = [chat.settings.linkedWorldBookId];
             delete chat.settings.linkedWorldBookId;
         }
+
+    // 兼容旧数据，为没有 isPinned 属性的聊天添加默认值
+    if (typeof chat.isPinned === 'undefined') {
+        chat.isPinned = false;
+    }
+
         acc[chat.id] = chat;
         return acc;
     }, {});
@@ -6554,11 +7923,14 @@ async function loadAllDataFromDB() {
 state.globalSettings = globalSettings || { 
     id: 'main', 
     wallpaper: 'linear-gradient(135deg, #89f7fe, #66a6ff)', 
+    lockscreenWallpaper: 'linear-gradient(135deg, #764ba2, #667eea)', // <-- 新增：默认锁屏壁纸
+    password: '', // <-- 新增：默认无密码
     fontUrl: '', 
     enableBackgroundActivity: false, 
     backgroundActivityInterval: 60,
     blockCooldownHours: 1,
-    appIcons: { ...DEFAULT_APP_ICONS } // 【核心修改】确保appIcons存在并有默认值
+    appIcons: { ...DEFAULT_APP_ICONS },
+    ringtoneUrl: 'https://files.catbox.moe/3w7gla.mp3' // <-- 【核心新增】在这里添加默认铃声URL
 };
 // 【核心修改】合并已保存的图标和默认图标，防止更新后旧数据丢失新图标
 state.globalSettings.appIcons = { ...DEFAULT_APP_ICONS, ...(state.globalSettings.appIcons || {}) };
@@ -6567,6 +7939,8 @@ state.globalSettings.appIcons = { ...DEFAULT_APP_ICONS, ...(state.globalSettings
     state.worldBooks = worldBooks || [];
     musicState.playlist = musicLib?.playlist || [];
     state.personaPresets = personaPresets || [];
+state.apiPresets = apiPresets || [];
+state.bubbleStylePresets = bubbleStylePresets || [];
     state.qzoneSettings = qzoneSettings || { id: 'main', nickname: '{{user}}', avatar: 'https://files.catbox.moe/q6z5fc.jpeg', banner: 'https://files.catbox.moe/r5heyt.gif' };
 
     // ▼▼▼ 【确保这一行在 Promise.all 之后，并使用解构赋值得到的 initialFavorites】 ▼▼▼
@@ -6580,7 +7954,10 @@ state.globalSettings.appIcons = { ...DEFAULT_APP_ICONS, ...(state.globalSettings
 
         function showNotification(chatId, messageContent) { clearTimeout(notificationTimeout); const chat = state.chats[chatId]; if (!chat) return; const bar = document.getElementById('notification-bar'); document.getElementById('notification-avatar').src = chat.settings.aiAvatar || chat.settings.groupAvatar || defaultAvatar; document.getElementById('notification-content').querySelector('.name').textContent = chat.name; document.getElementById('notification-content').querySelector('.message').textContent = messageContent; const newBar = bar.cloneNode(true); bar.parentNode.replaceChild(newBar, bar); newBar.addEventListener('click', () => { openChat(chatId); newBar.classList.remove('visible'); }); newBar.classList.add('visible'); notificationTimeout = setTimeout(() => { newBar.classList.remove('visible'); }, 4000); }
 
-        function updateClock() { const now = new Date(); const timeString = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }); const dateString = now.toLocaleDateString('zh-CN', { weekday: 'long', month: 'long', day: 'numeric' }); document.getElementById('main-time').textContent = timeString; document.getElementById('status-bar-time').textContent = timeString; document.getElementById('main-date').textContent = dateString; }
+        function updateClock() { const now = new Date(); const timeString = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }); const dateString = now.toLocaleDateString('zh-CN', { weekday: 'long', month: 'long', day: 'numeric' }); document.getElementById('main-time').textContent = timeString; document.getElementById('status-bar-time').textContent = timeString; document.getElementById('main-date').textContent = dateString; 
+    // 更新锁屏时钟 (新增)
+    updateLockClock();
+}
 
 /**
  * 【终极健壮版】解析AI返回的、可能格式不规范的响应内容
@@ -6641,18 +8018,18 @@ function parseAiResponse(content) {
     document.getElementById('background-activity-switch').checked = state.globalSettings.enableBackgroundActivity || false;
     document.getElementById('background-interval-input').value = state.globalSettings.backgroundActivityInterval || 60;
     document.getElementById('block-cooldown-input').value = state.globalSettings.blockCooldownHours || 1;
+
+   renderApiPresetSelector(); // 👈 在这里添加这一行
 }
         window.renderApiSettingsProxy = renderApiSettings;
 
-// ▼▼▼ 请用这个【全新版本】的函数，完整替换掉你旧的 renderChatList ▼▼▼
+// ▼▼▼ 请用这个【全新修正版】替换旧的 renderChatList 函数 ▼▼▼
 async function renderChatList() {
     const chatListEl = document.getElementById('chat-list');
     chatListEl.innerHTML = '';
 
-    // 1. 像以前一样，获取所有聊天并按最新消息时间排序
-    const allChats = Object.values(state.chats).sort((a, b) => (b.history.slice(-1)[0]?.timestamp || 0) - (a.history.slice(-1)[0]?.timestamp || 0));
-    
-    // 2. 获取所有分组
+    // 1. 获取所有聊天和分组数据
+    const allChats = Object.values(state.chats);
     const allGroups = await db.qzoneGroups.toArray();
 
     if (allChats.length === 0) {
@@ -6660,27 +8037,39 @@ async function renderChatList() {
         return;
     }
 
-    // --- 【核心修正开始】---
+    // 2. 将聊天明确地分为“置顶”和“未置顶”两组
+    const pinnedChats = allChats.filter(chat => chat.isPinned);
+    const unpinnedChats = allChats.filter(chat => !chat.isPinned);
 
-    // 3. 为每个分组找到其内部最新的消息时间戳
+    // 3. 对置顶的聊天，仅按最新消息时间排序
+    pinnedChats.sort((a, b) => (b.history.slice(-1)[0]?.timestamp || 0) - (a.history.slice(-1)[0]?.timestamp || 0));
+
+    // 4. 【优先渲染】所有置顶的聊天
+    pinnedChats.forEach(chat => {
+        const item = createChatListItem(chat);
+        chatListEl.appendChild(item);
+    });
+
+    // 5. 【接下来处理未置顶的聊天】应用您之前的分组逻辑
+    // 为每个分组找到其内部最新的消息时间戳 (只在未置顶聊天中查找)
     allGroups.forEach(group => {
-        // 从已排序的 allChats 中找到本组的第一个（也就是最新的）聊天
-        const latestChatInGroup = allChats.find(chat => chat.groupId === group.id);
-        // 如果找到了，就用它的时间戳；如果该分组暂时没有聊天或聊天没有历史记录，就用0
+        const latestChatInGroup = unpinnedChats
+            .filter(chat => chat.groupId === group.id) // 找到属于这个组的聊天
+            .sort((a, b) => (b.history.slice(-1)[0]?.timestamp || 0) - (a.history.slice(-1)[0]?.timestamp || 0))[0]; // 排序后取第一个
+        
         group.latestTimestamp = latestChatInGroup ? (latestChatInGroup.history.slice(-1)[0]?.timestamp || 0) : 0;
     });
 
-    // 4. 根据这个最新的时间戳来对“分组本身”进行排序
+    // 根据分组的最新时间戳，对分组本身进行排序
     allGroups.sort((a, b) => b.latestTimestamp - a.latestTimestamp);
 
-    // --- 【核心修正结束】---
-
-    // 5. 现在，我们按照排好序的分组来渲染
+    // 6. 遍历排序后的分组，渲染其中的【未置顶】好友
     allGroups.forEach(group => {
-        // 从总列表里过滤出属于这个（已排序）分组的好友
-        const groupChats = allChats.filter(chat => !chat.isGroup && chat.groupId === group.id);
-        // 如果这个分组是空的（可能所有好友都被删了），就跳过
-        if (groupChats.length === 0) return;
+        const groupChats = unpinnedChats
+            .filter(chat => !chat.isGroup && chat.groupId === group.id)
+            .sort((a, b) => (b.history.slice(-1)[0]?.timestamp || 0) - (a.history.slice(-1)[0]?.timestamp || 0));
+        
+        if (groupChats.length === 0) return; // 如果这个分组里没有未置顶的好友，就跳过
 
         const groupContainer = document.createElement('div');
         groupContainer.className = 'chat-group-container';
@@ -6692,7 +8081,6 @@ async function renderChatList() {
             <div class="chat-group-content"></div>
         `;
         const contentEl = groupContainer.querySelector('.chat-group-content');
-        // 因为 allChats 本身就是有序的，所以 groupChats 自然也是有序的
         groupChats.forEach(chat => {
             const item = createChatListItem(chat);
             contentEl.appendChild(item);
@@ -6700,10 +8088,12 @@ async function renderChatList() {
         chatListEl.appendChild(groupContainer);
     });
 
-    // 6. 最后，渲染所有群聊和未分组的好友
-    // 他们的顺序因为 allChats 的初始排序，天然就是正确的
-    const ungroupedOrGroupChats = allChats.filter(chat => chat.isGroup || (!chat.isGroup && !chat.groupId));
-    ungroupedOrGroupChats.forEach(chat => {
+    // 7. 最后，渲染所有【未置顶】的群聊和【未分组的】好友
+    const remainingChats = unpinnedChats
+        .filter(chat => chat.isGroup || (!chat.isGroup && !chat.groupId))
+        .sort((a, b) => (b.history.slice(-1)[0]?.timestamp || 0) - (a.history.slice(-1)[0]?.timestamp || 0));
+    
+    remainingChats.forEach(chat => {
         const item = createChatListItem(chat);
         chatListEl.appendChild(item);
     });
@@ -6718,102 +8108,103 @@ async function renderChatList() {
 }
 // ▲▲▲ 替换结束 ▲▲▲
 
+// ▼▼▼ 用这个【最终修正版】替换你项目中那个导致错误的 createChatListItem 函数 ▼▼▼
 function createChatListItem(chat) {
     const lastMsgObj = chat.history.filter(msg => !msg.isHidden).slice(-1)[0] || {};
     let lastMsgDisplay;
 
-    // --- ▼▼▼ 【核心修改】在这里加入对关系状态的判断 ▼▼▼ ---
+    // --- 消息预览的逻辑保持不变 ---
     if (!chat.isGroup && chat.relationship?.status === 'pending_user_approval') {
         lastMsgDisplay = `<span style="color: #ff8c00;">[好友申请] ${chat.relationship.applicationReason || '请求添加你为好友'}</span>`;
-    }
-    // --- ▲▲▲ 修改结束 ▲▲▲ ---
-
-// ▼▼▼ 在这里新增 else if ▼▼▼
-else if (!chat.isGroup && chat.relationship?.status === 'blocked_by_ai') {
-    lastMsgDisplay = `<span style="color: #dc3545;">[你已被对方拉黑]</span>`;
-}
-// ▲▲▲ 新增结束 ▲▲▲
-    
-    // 【核心修改】优先显示状态，而不是最后一条消息
-    if (chat.isGroup) {
-        // 群聊逻辑保持不变
+    } else if (!chat.isGroup && chat.relationship?.status === 'blocked_by_ai') {
+        lastMsgDisplay = `<span style="color: #dc3545;">[你已被对方拉黑]</span>`;
+    } else if (chat.isGroup) {
         if (lastMsgObj.type === 'pat_message') { lastMsgDisplay = `[系统消息] ${lastMsgObj.content}`; }
-        // ... (其他群聊消息类型判断) ...
         else if (lastMsgObj.type === 'transfer') { lastMsgDisplay = '[转账]'; }
         else if (lastMsgObj.type === 'ai_image' || lastMsgObj.type === 'user_photo') { lastMsgDisplay = '[照片]'; }
         else if (lastMsgObj.type === 'voice_message') { lastMsgDisplay = '[语音]'; }
         else if (typeof lastMsgObj.content === 'string' && STICKER_REGEX.test(lastMsgObj.content)) { lastMsgDisplay = lastMsgObj.meaning ? `[表情: ${lastMsgObj.meaning}]` : '[表情]'; }
         else if (Array.isArray(lastMsgObj.content)) { lastMsgDisplay = `[图片]`; }
         else { lastMsgDisplay = String(lastMsgObj.content || '...').substring(0, 20); }
-
         if (lastMsgObj.senderName && lastMsgObj.type !== 'pat_message') {
             lastMsgDisplay = `${lastMsgObj.senderName}: ${lastMsgDisplay}`;
         }
-
     } else {
-        // 单聊逻辑：显示状态
-        // 确保 chat.status 对象存在
         const statusText = chat.status?.text || '在线';
         lastMsgDisplay = `[${statusText}]`;
     }
 
-    const item = document.createElement('div');
-    item.className = 'chat-list-item';
-    item.dataset.chatId = chat.id;
+    const lastMsgTimestamp = lastMsgObj?.timestamp;
+    const timeDisplay = formatChatListTimestamp(lastMsgTimestamp);
+    
+    const container = document.createElement('div');
+    container.className = 'chat-list-item-swipe-container';
+    container.dataset.chatId = chat.id;
+
+    const content = document.createElement('div');
+    content.className = `chat-list-item-content ${chat.isPinned ? 'pinned' : ''}`;
+    
     const avatar = chat.isGroup ? chat.settings.groupAvatar : chat.settings.aiAvatar;
     
-    item.innerHTML = `
-        <img src="${avatar || defaultAvatar}" class="avatar">
-        <div class="info">
-            <div class="name-line">
-                <span class="name">${chat.name}</span>
-                ${chat.isGroup ? '<span class="group-tag">群聊</span>' : ''}
+    // --- 【核心修正】在这里，我们创建了一个新的右侧容器，并把时间和未读红点都放了进去 ---
+    content.innerHTML = `
+        <div class="chat-list-item" data-chat-id="${chat.id}">
+            <img src="${avatar || defaultAvatar}" class="avatar">
+            <div class="info">
+                <div class="name-line">
+                    <span class="name">${chat.name}</span>
+                    ${chat.isGroup ? '<span class="group-tag">群聊</span>' : ''}
+                </div>
+                <div class="last-msg" style="color: ${chat.isGroup ? 'var(--text-secondary)' : '#b5b5b5'}; font-style: italic;">${lastMsgDisplay}</div>
             </div>
-            <div class="last-msg" style="color: ${chat.isGroup ? 'var(--text-secondary)' : '#b5b5b5'}; font-style: italic;">${lastMsgDisplay}</div>
-        </div>
-        <!-- 这里就是我们新加的红点HTML结构 -->
-        <div class="unread-count-wrapper">
-            <span class="unread-count" style="display: none;">0</span>
+            <div class="chat-list-right-column">
+                <div class="chat-list-time">${timeDisplay}</div>
+                <div class="unread-count-wrapper">
+                    <span class="unread-count" style="display: none;">0</span>
+                </div>
+            </div>
         </div>
     `;
     
-    // 【核心修改2】在这里添加控制红点显示/隐藏的逻辑
+    // 后续的滑动按钮逻辑保持不变
+    const actions = document.createElement('div');
+    actions.className = 'swipe-actions';
+    const pinButtonText = chat.isPinned ? '取消置顶' : '置顶';
+    const pinButtonClass = chat.isPinned ? 'unpin' : 'pin';
+    actions.innerHTML = `
+        <button class="swipe-action-btn ${pinButtonClass}">${pinButtonText}</button>
+        <button class="swipe-action-btn delete">删除</button>
+    `;
+    
+    container.appendChild(content);
+    container.appendChild(actions);
+    
+    // --- 【重要】现在这段代码可以正常工作了，因为 .unread-count 元素又回来了！ ---
     const unreadCount = chat.unreadCount || 0;
-    const unreadEl = item.querySelector('.unread-count');
+    const unreadEl = content.querySelector('.unread-count');
     if (unreadCount > 0) {
         unreadEl.textContent = unreadCount > 99 ? '99+' : unreadCount;
-        // 注意这里是 'inline-flex'，与我们的CSS对应，使其垂直居中
         unreadEl.style.display = 'inline-flex';
     } else {
         unreadEl.style.display = 'none';
     }
     
-    const avatarEl = item.querySelector('.avatar');
-    if (avatarEl) {
-        avatarEl.style.cursor = 'pointer';
-        avatarEl.addEventListener('click', (e) => {
-            e.stopPropagation();
-            handleUserPat(chat.id, chat.name);
-        });
-    }
-    
-    const infoEl = item.querySelector('.info');
+    // 事件监听逻辑保持不变
+    const infoEl = content.querySelector('.info');
     if (infoEl) {
         infoEl.addEventListener('click', () => openChat(chat.id));
     }
-
-    addLongPressListener(item, async (e) => {
-        const confirmed = await showCustomConfirm('删除对话', `确定要删除与 "${chat.name}" 的整个对话吗？此操作不可撤销。`, { confirmButtonClass: 'btn-danger' });
-        if (confirmed) {
-            if (musicState.isActive && musicState.activeChatId === chat.id) await endListenTogetherSession(false);
-            delete state.chats[chat.id];
-            if (state.activeChatId === chat.id) state.activeChatId = null;
-            await db.chats.delete(chat.id);
-            renderChatList();
-        }
+const avatarEl = content.querySelector('.avatar, .avatar-with-frame');
+if (avatarEl) {
+     avatarEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handleUserPat(chat.id, chat.name);
     });
-    return item;
 }
+
+    return container;
+}
+// ▲▲▲ 替换结束 ▲▲▲
 
 // ▼▼▼ 请用这个【带诊断功能的全新版本】替换旧的 renderChatInterface 函数 ▼▼▼
 function renderChatInterface(chatId) {
@@ -6915,7 +8306,21 @@ chatScreen.style.backgroundColor = chat.settings.background ? 'transparent' : (i
     const totalMessages = history.length;
     currentRenderedCount = 0;
     const initialMessages = history.slice(-MESSAGE_RENDER_WINDOW);
-    initialMessages.forEach(msg => appendMessage(msg, chat, true));
+let lastMessageTimestamp = null;
+
+initialMessages.forEach(msg => {
+    if (msg.isHidden) return; // 【新增】跳过隐藏消息
+
+    if (isNewDay(msg.timestamp, lastMessageTimestamp)) {
+        // 【核心修改】调用我们新的生成器函数
+        const dateStampEl = createDateStampElement(msg.timestamp);
+        messagesContainer.insertBefore(dateStampEl, document.getElementById('typing-indicator'));
+    }
+    
+    appendMessage(msg, chat, true);
+    
+    lastMessageTimestamp = msg.timestamp;
+});
     currentRenderedCount = initialMessages.length;
     if (totalMessages > currentRenderedCount) {
         prependLoadMoreButton(messagesContainer);
@@ -6931,7 +8336,37 @@ chatScreen.style.backgroundColor = chat.settings.background ? 'transparent' : (i
 
         function prependLoadMoreButton(container) { const button = document.createElement('button'); button.id = 'load-more-btn'; button.textContent = '加载更早的记录'; button.addEventListener('click', loadMoreMessages); container.prepend(button); }
 
-        function loadMoreMessages() { const messagesContainer = document.getElementById('chat-messages'); const chat = state.chats[state.activeChatId]; if (!chat) return; const loadMoreBtn = document.getElementById('load-more-btn'); if (loadMoreBtn) loadMoreBtn.remove(); const totalMessages = chat.history.length; const nextSliceStart = totalMessages - currentRenderedCount - MESSAGE_RENDER_WINDOW; const nextSliceEnd = totalMessages - currentRenderedCount; const messagesToPrepend = chat.history.slice(Math.max(0, nextSliceStart), nextSliceEnd); const oldScrollHeight = messagesContainer.scrollHeight; messagesToPrepend.reverse().forEach(msg => prependMessage(msg, chat)); currentRenderedCount += messagesToPrepend.length; const newScrollHeight = messagesContainer.scrollHeight; messagesContainer.scrollTop += (newScrollHeight - oldScrollHeight); if (totalMessages > currentRenderedCount) { prependLoadMoreButton(messagesContainer); } }
+        function loadMoreMessages() { const messagesContainer = document.getElementById('chat-messages'); const chat = state.chats[state.activeChatId]; if (!chat) return; const loadMoreBtn = document.getElementById('load-more-btn'); if (loadMoreBtn) loadMoreBtn.remove(); const totalMessages = chat.history.length; const nextSliceStart = totalMessages - currentRenderedCount - MESSAGE_RENDER_WINDOW; const nextSliceEnd = totalMessages - currentRenderedCount; const messagesToPrepend = chat.history.slice(Math.max(0, nextSliceStart), nextSliceEnd); const oldScrollHeight = messagesContainer.scrollHeight; // ▼▼▼ 请将这个完整的代码块，粘贴到被删除的位置 ▼▼▼
+
+// 1. 找到屏幕上已有的、最老的那条【真实消息】的时间戳
+const firstVisibleMessage = messagesContainer.querySelector('.message-wrapper:not(.date-stamp-wrapper)');
+let subsequentMessageTimestamp = firstVisibleMessage ? parseInt(firstVisibleMessage.dataset.timestamp) : null;
+
+// 2. 从后往前（从新到旧）遍历我们要新加载的消息
+messagesToPrepend.reverse().forEach(currentMsg => {
+    // 检查这条新消息和它后面那条（可能是屏幕上已有的，也可能是刚加载的）消息是否跨天
+    if (subsequentMessageTimestamp && isNewDay(subsequentMessageTimestamp, currentMsg.timestamp)) {
+        // 如果跨天，就为后面那条“较新”的消息创建一个日期戳
+        const dateStampEl = createDateStampElement(subsequentMessageTimestamp);
+        messagesContainer.prepend(dateStampEl);
+    }
+    
+    // 正常地把当前这条新消息放到最前面
+    prependMessage(currentMsg, chat);
+    
+    // 更新追踪器，为下一次比较做准备
+    subsequentMessageTimestamp = currentMsg.timestamp;
+});
+
+// 3. 【边界处理】处理所有新加载消息的最前面（也就是整个聊天记录的最老）的那条消息
+// 它也需要一个日期戳
+if (subsequentMessageTimestamp) {
+    const dateStampEl = createDateStampElement(subsequentMessageTimestamp);
+    messagesContainer.prepend(dateStampEl);
+}
+
+// ▲▲▲ 粘贴结束 ▲▲▲
+currentRenderedCount += messagesToPrepend.length; const newScrollHeight = messagesContainer.scrollHeight; messagesContainer.scrollTop += (newScrollHeight - oldScrollHeight); if (totalMessages > currentRenderedCount) { prependLoadMoreButton(messagesContainer); } }
 
 // ▼▼▼ 用这个【新版本】替换旧的 renderWallpaperScreen 函数 ▼▼▼
 function renderWallpaperScreen() { 
@@ -6944,8 +8379,25 @@ function renderWallpaperScreen() {
         preview.style.backgroundImage = bg; 
         preview.textContent = '当前为渐变色'; 
     }
+
+    // 锁屏壁纸预览 (新增逻辑)
+    const lockscreenPreview = document.getElementById('lockscreen-wallpaper-preview');
+    const lockBg = newLockscreenWallpaperBase64 || state.globalSettings.lockscreenWallpaper;
+    if (lockBg && lockBg.startsWith('data:image')) {
+        lockscreenPreview.style.backgroundImage = `url(${lockBg})`;
+        lockscreenPreview.textContent = '';
+    } else if (lockBg) {
+        lockscreenPreview.style.backgroundImage = lockBg;
+        lockscreenPreview.textContent = '当前为渐变色';
+    }
+
+    // 密码输入框 (新增逻辑)
+    document.getElementById('password-set-input').value = state.globalSettings.password || '';
+
     // 【核心修改】在这里调用图标渲染函数
     renderIconSettings();
+
+document.getElementById('ringtone-url-input').value = state.globalSettings.ringtoneUrl || '';
 }
 // ▲▲▲ 替换结束 ▲▲▲
         window.renderWallpaperScreenProxy = renderWallpaperScreen;
@@ -7156,25 +8608,42 @@ if (msg.type === 'recalled_message') {
     timestampEl.className = 'timestamp';
     timestampEl.textContent = formatTimestamp(msg.timestamp);
 
-    // ▼▼▼【粘贴这段新代码】▼▼▼
-    let avatarSrc; // 我们现在只需要头像图片，不再需要头像框了
+    // 找到确定 avatarSrc 的那段代码
+    let avatarSrc, avatarFrameSrc = ''; // <--- 声明两个变量
     if (chat.isGroup) {
         if (isUser) {
             avatarSrc = chat.settings.myAvatar || defaultMyGroupAvatar;
+            avatarFrameSrc = chat.settings.myAvatarFrame || ''; // <--- 获取“我”的头像框
         } else {
             const member = chat.members.find(m => m.originalName === msg.senderName);
             avatarSrc = member ? member.avatar : defaultGroupMemberAvatar;
+            avatarFrameSrc = member ? (member.avatarFrame || '') : ''; // <--- 获取成员的头像框
         }
     } else {
         if (isUser) {
             avatarSrc = chat.settings.myAvatar || defaultAvatar;
+            avatarFrameSrc = chat.settings.myAvatarFrame || ''; // <--- 获取“我”的头像框
         } else {
             avatarSrc = chat.settings.aiAvatar || defaultAvatar;
+            avatarFrameSrc = chat.settings.aiAvatarFrame || ''; // <--- 获取AI的头像框
         }
     }
-    // 直接生成最简单的头像HTML，不再有任何和头像框相关的逻辑
-    const avatarHtml = `<img src="${avatarSrc}" class="avatar">`;
-    // ▲▲▲【粘贴结束】▲▲▲
+
+    // ▼▼▼ 用下面这整块【条件渲染逻辑】替换你7.23版中简单的 avatarHtml 声明 ▼▼▼
+    let avatarHtml;
+    // 如果存在头像框URL
+    if (avatarFrameSrc) {
+        avatarHtml = `
+            <div class="avatar-with-frame">
+                <img src="${avatarSrc}" class="avatar-img">
+                <img src="${avatarFrameSrc}" class="avatar-frame">
+            </div>
+        `;
+    } else {
+    // 如果没有，就使用最简单的头像结构
+        avatarHtml = `<img src="${avatarSrc}" class="avatar">`;
+    }
+    // ▲▲▲ 替换结束 ▲▲▲
 
     let contentHtml;
     
@@ -7517,10 +8986,10 @@ if (msg.quote) {
         wrapper.addEventListener('click', () => { if (isSelectionMode) toggleMessageSelection(msg.timestamp); });
 
 if (!isUser) {
-    const avatarEl = wrapper.querySelector('.avatar'); //  <-- 1. 把查找目标改成 '.avatar'
+    const avatarEl = wrapper.querySelector('.avatar, .avatar-with-frame'); 
     if (avatarEl) {
         avatarEl.style.cursor = 'pointer';
-        avatarEl.addEventListener('click', (e) => {    //  <-- 2. 确保这里也用新变量
+        avatarEl.addEventListener('click', (e) => {    
             e.stopPropagation();
             const characterName = chat.isGroup ? msg.senderName : chat.name;
             handleUserPat(chat.id, characterName);
@@ -7591,6 +9060,23 @@ async function triggerAiResponse() {
     if (!state.activeChatId) return;
     const chatId = state.activeChatId;
     const chat = state.chats[state.activeChatId];
+
+// ▼▼▼ 在这里粘贴新代码 ▼▼▼
+const { proxyUrl, apiKey, model } = state.apiConfig;
+const isApiBlocked = BLOCKED_API_SITES.some(blockedDomain => proxyUrl.includes(blockedDomain));
+
+if (isApiBlocked) {
+    console.error(`API 请求已被拦截，因为站点 ${proxyUrl} 在黑名单中。`);
+    // 为了不打扰用户，我们只在控制台打印错误，不弹出警告
+    // 如果您想在聊天界面提示用户，可以取消下面这几行的注释
+    /*
+    const errorMessage = { role: 'assistant', content: '[系统错误：当前配置的API站点已被禁用，请更换。]', timestamp: Date.now() };
+    if(chat.isGroup) errorMessage.senderName = "系统消息";
+    appendMessage(errorMessage, chat);
+    */
+    return; // 阻止API请求
+}
+// ▲▲▲ 新代码粘贴结束 ▲▲▲
 
 const chatHeaderTitle = document.getElementById('chat-header-title');
 
@@ -9496,29 +10982,42 @@ try {
         console.log("正在为后台活动发送API请求，Payload:", JSON.stringify(messagesPayload, null, 2)); // 添加日志，方便调试
 
             // 发送请求
-            let  isGemini = proxyUrl === GEMINI_API_URL;
-            let geminiConfig = toGeminiRequestData(model,apiKey,systemPrompt, messagesPayload,isGemini)
-            const response = isGemini ? await fetch(geminiConfig.url, geminiConfig.data) :  await fetch(`${proxyUrl}/v1/chat/completions`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`},
-                body: JSON.stringify({
-                    model: model,
-                    messages: messagesPayload,
-                    temperature: 0.9,
-                })
-            });
+            let isGemini = proxyUrl === GEMINI_API_URL;
+            let geminiConfig = toGeminiRequestData(model, apiKey, systemPrompt, messagesPayload, isGemini);
+
+            const response = isGemini 
+                ? await fetch(geminiConfig.url, geminiConfig.data) 
+                : await fetch(`${proxyUrl}/v1/chat/completions`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`},
+                    body: JSON.stringify({
+                        model: model,
+                        messages: messagesPayload,
+                        temperature: 0.9,
+                    })
+                });
 
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(`API请求失败: ${response.status} - ${JSON.stringify(errorData)}`);
             }
+
             const data = await response.json();
-            // 检查是否有有效回复
-            if (!data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
-                console.warn(`API为空回或格式不正确，角色 "${chat.name}" 的本次后台活动跳过。`);
+
+            // 【核心修复】使用可选链操作符 (?.) 安全地提取消息内容
+            const aiResponseContent = isGemini
+                ? data?.candidates?.[0]?.content?.parts?.[0]?.text
+                : data?.choices?.[0]?.message?.content;
+
+            // 现在，我们再对提取出的内容进行检查，这样就万无一失了
+            if (!aiResponseContent) {
+                console.warn(`API为空回或格式不正确（可能因安全设置被拦截），角色 "${chat.name}" 的本次后台活动跳过。返回数据:`, data);
                 return;
             }
-            const responseArray = parseAiResponse(isGemini? data.candidates[0].content.parts[0].text : data.choices[0].message.content);
+
+            // 使用安全获取到的内容进行解析
+            const responseArray = parseAiResponse(aiResponseContent);
+
         
         // 后续处理AI返回指令的逻辑保持不变...
         for (const action of responseArray) {
@@ -10872,6 +12371,7 @@ function showIncomingCallModal() {
     }
     
     document.getElementById('incoming-call-modal').classList.add('visible');
+    playRingtone(); // <-- 在这里添加这一行
 }
 // ▲▲▲ 替换结束 ▲▲▲
 
@@ -10880,6 +12380,7 @@ function showIncomingCallModal() {
  */
 function hideIncomingCallModal() {
     document.getElementById('incoming-call-modal').classList.remove('visible');
+    stopRingtone(); // <-- 在这里添加这一行
 }
 
 async function triggerAiInCallAction(userInput = null) {
@@ -12835,6 +14336,1163 @@ async function deleteCategory(categoryId) {
 
 // ▲▲▲ 新函数粘贴结束 ▲▲▲
 
+// --- ▼▼▼ 【全新】自定义头像框管理功能 ▼▼▼ ---
+
+function openFrameManager() {
+    renderFrameManager();
+    document.getElementById('custom-frame-manager-modal').classList.add('visible');
+}
+
+async function renderFrameManager() {
+    const grid = document.getElementById('custom-frame-grid');
+    grid.innerHTML = '';
+    const customFrames = await db.customAvatarFrames.toArray();
+    if (customFrames.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">你还没有上传过头像框哦~</p>';
+        return;
+    }
+    customFrames.forEach(frame => {
+        const item = document.createElement('div');
+        // 复用表情面板的样式，很方便
+        item.className = 'sticker-item'; 
+        item.style.backgroundImage = `url(${frame.url})`;
+        item.title = frame.name;
+        
+        const deleteBtn = document.createElement('div');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '×';
+        deleteBtn.style.display = 'block';
+        deleteBtn.onclick = async (e) => {
+            e.stopPropagation();
+            const confirmed = await showCustomConfirm('删除头像框', `确定要删除“${frame.name}”吗？`, { confirmButtonClass: 'btn-danger' });
+            if (confirmed) {
+                await db.customAvatarFrames.delete(frame.id);
+                renderFrameManager(); // 刷新管理列表
+            }
+        };
+        item.appendChild(deleteBtn);
+        grid.appendChild(item);
+    });
+}
+
+function handleUploadCustomFrame() {
+    document.getElementById('custom-frame-upload-input').addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const name = await showCustomPrompt("命名头像框", "请为这个头像框起一个名字");
+        if (!name || !name.trim()) {
+            event.target.value = null; // 清空选择，以便下次还能选同一个文件
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const newFrame = {
+                id: 'frame_' + Date.now(),
+                name: name.trim(),
+                url: e.target.result // Base64 URL
+            };
+            await db.customAvatarFrames.add(newFrame);
+            renderFrameManager(); // 上传成功后刷新列表
+        };
+        reader.readAsDataURL(file);
+        event.target.value = null; // 清空选择
+    }, { once: true }); // 使用 once: true 确保事件只触发一次
+
+    document.getElementById('custom-frame-upload-input').click();
+}
+
+// ▲▲▲ 新增功能函数结束 ▲▲▲
+
+// ▼▼▼ 用这【一整块】全新的代码，替换掉你旧的 openFrameSelectorModal 函数 ▼▼▼
+
+async function openFrameSelectorModal(type, targetId = null) {
+    const grid = document.getElementById('avatar-frame-grid');
+    grid.innerHTML = '';
+    
+    currentFrameSelection.type = type;
+    currentFrameSelection.target = targetId;
+    
+    const chat = state.chats[state.activeChatId];
+    let currentFrameUrl = '';
+    let previewAvatarUrl = '';
+
+    // 确定当前使用的是哪个头像框和哪个头像
+    if (type === 'ai') {
+        currentFrameUrl = chat.settings.aiAvatarFrame || '';
+        previewAvatarUrl = chat.settings.aiAvatar || defaultAvatar;
+    } else if (type === 'my') {
+        currentFrameUrl = chat.settings.myAvatarFrame || '';
+        previewAvatarUrl = chat.settings.myAvatar || defaultAvatar;
+    } else if (type === 'member' && targetId) {
+        const member = chat.members.find(m => m.id === targetId);
+        if (member) {
+            currentFrameUrl = member.avatarFrame || '';
+            previewAvatarUrl = member.avatar || defaultGroupMemberAvatar;
+        }
+    }
+    
+    // 【核心改造】
+    // 1. 从数据库读取你自己的自定义头像框
+    const customFrames = await db.customAvatarFrames.toArray();
+
+    // 2. 将内置的头像框数组和你的自定义头像框数组合并成一个大列表
+    //    我们使用 Set 来自动去重，防止内置的和自定义的URL重复
+    const frameUrlSet = new Set();
+    const allFrames = [...avatarFrames, ...customFrames].filter(frame => {
+        if (!frame.url || !frameUrlSet.has(frame.url)) {
+            frameUrlSet.add(frame.url);
+            return true;
+        }
+        return false;
+    });
+
+    // 3. 遍历这个合并后的大列表来创建所有选项
+    allFrames.forEach(frame => {
+        const item = createFrameItem(frame, previewAvatarUrl);
+        // 如果当前头像框的URL和列表中的某一项匹配，就默认选中它
+        if (currentFrameUrl === frame.url) {
+            item.classList.add('selected');
+            // 确保初始选择被记录
+            currentFrameSelection.url = frame.url;
+        }
+        grid.appendChild(item);
+    });
+
+    // 最后，显示模态框
+    document.getElementById('avatar-frame-modal').classList.add('visible');
+}
+
+// ▲▲▲ 替换结束 ▲▲▲
+// 辅助函数：创建一个头像框选项
+function createFrameItem(frame, previewAvatarSrc) {
+    const item = document.createElement('div');
+    item.className = 'frame-item';
+    item.title = frame.name;
+    item.innerHTML = `
+        <img src="${previewAvatarSrc}" class="preview-avatar">
+        ${frame.url ? `<img src="${frame.url}" class="preview-frame" style="pointer-events: none;">` : ''}
+    `;
+    item.addEventListener('click', () => {
+        document.querySelectorAll('#avatar-frame-grid .frame-item').forEach(el => el.classList.remove('selected'));
+        item.classList.add('selected');
+        currentFrameSelection.url = frame.url;
+    });
+    return item;
+}
+
+// 保存选择
+async function saveSelectedFrames() {
+    const chat = state.chats[state.activeChatId];
+    if (!chat) return;
+
+    const { type, url, target } = currentFrameSelection;
+
+    if (type === 'ai') {
+        chat.settings.aiAvatarFrame = url;
+    } else if (type === 'my') {
+        chat.settings.myAvatarFrame = url;
+    } else if (type === 'member' && target) {
+        const member = chat.members.find(m => m.id === target);
+        if (member) member.avatarFrame = url;
+    }
+    
+    await db.chats.put(chat);
+    document.getElementById('avatar-frame-modal').classList.remove('visible');
+    
+    // 刷新UI
+    renderChatInterface(state.activeChatId);
+    // 如果聊天设置弹窗还开着，就刷新一下里面的头像预览
+    if (document.getElementById('chat-settings-modal').classList.contains('visible')) {
+        document.getElementById('chat-settings-btn').click(); 
+    }
+}
+
+/**
+ * 检查两个时间戳是否在不同的自然日
+ * @param {number} timestamp1 - 新消息的时间戳
+ * @param {number | null} timestamp2 - 上一条消息的时间戳
+ * @returns {boolean} - 如果是新的一天，返回 true
+ */
+function isNewDay(timestamp1, timestamp2) {
+    // 如果没有上一条消息的时间戳，说明这是第一条消息，肯定要显示日期
+    if (!timestamp2) return true;
+
+    const date1 = new Date(timestamp1);
+    const date2 = new Date(timestamp2);
+
+    // 比较年、月、日是否完全相同
+    return date1.getFullYear() !== date2.getFullYear() ||
+           date1.getMonth()    !== date2.getMonth()    ||
+           date1.getDate()     !== date2.getDate();
+}
+
+/**
+ * 将时间戳格式化为 "X月X日 HH:mm" 的形式
+ * @param {number} timestamp - 时间戳
+ * @returns {string} - 格式化后的日期字符串
+ */
+function formatDateStamp(timestamp) {
+    const date = new Date(timestamp);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${month}月${day}日 ${hours}:${minutes}`;
+}
+
+/**
+ * 【全新】根据时间戳，格式化聊天列表右侧的日期/时间显示
+ * @param {number} timestamp - 消息的时间戳
+ * @returns {string} - 格式化后的字符串 (例如 "14:30", "昨天", "08/03")
+ */
+function formatChatListTimestamp(timestamp) {
+    if (!timestamp) return ''; // 如果没有时间戳，返回空字符串
+
+    const now = new Date();
+    const msgDate = new Date(timestamp);
+
+    // 判断是否为今天
+    const isToday = now.getFullYear() === msgDate.getFullYear() &&
+                    now.getMonth() === msgDate.getMonth() &&
+                    now.getDate() === msgDate.getDate();
+
+    if (isToday) {
+        // 如果是今天，只显示时间
+        return msgDate.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // 判断是否为昨天
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday = yesterday.getFullYear() === msgDate.getFullYear() &&
+                        yesterday.getMonth() === msgDate.getMonth() &&
+                        yesterday.getDate() === msgDate.getDate();
+
+    if (isYesterday) {
+        return '昨天';
+    }
+
+    // 判断是否为今年
+    if (now.getFullYear() === msgDate.getFullYear()) {
+        // 如果是今年，显示 "月/日"
+        const month = String(msgDate.getMonth() + 1).padStart(2, '0');
+        const day = String(msgDate.getDate()).padStart(2, '0');
+        return `${month}/${day}`;
+    }
+
+    // 如果是更早的年份，显示 "年/月/日"
+    const year = msgDate.getFullYear();
+    const month = String(msgDate.getMonth() + 1).padStart(2, '0');
+    const day = String(msgDate.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+}
+
+/**
+ * 【全新】创建一个功能完整的日期戳“伪消息”元素
+ * @param {number} timestamp - 该日期戳代表的时间
+ * @returns {HTMLElement} - 创建好的 DOM 元素
+ */
+function createDateStampElement(timestamp) {
+    // 1. 创建最外层的包裹 div，和真实消息一样
+    const wrapper = document.createElement('div');
+    wrapper.className = 'message-wrapper date-stamp-wrapper';
+    // 【核心】把时间戳存起来，这是多选和删除的关键
+    wrapper.dataset.timestamp = timestamp; 
+
+    // 2. 创建气泡 div
+    const bubble = document.createElement('div');
+    // 【核心】同时加上 .message-bubble 类，让多选逻辑能找到它
+    bubble.className = 'message-bubble date-stamp-bubble';
+    bubble.dataset.timestamp = timestamp;
+    bubble.textContent = formatDateStamp(timestamp);
+    
+    wrapper.appendChild(bubble);
+
+    // 3. 【核心】为它绑定和真实消息完全一样的事件监听器
+    addLongPressListener(wrapper, () => {
+        // 日期戳不支持复杂操作，长按直接进入多选
+        enterSelectionMode(timestamp);
+    });
+    wrapper.addEventListener('click', () => { 
+        if (isSelectionMode) {
+            toggleMessageSelection(timestamp);
+        }
+    });
+
+    return wrapper;
+}
+
+// ▼▼▼ 【全新】将这三个函数粘贴到JS功能函数定义区 ▼▼▼
+
+/**
+ * 打开并准备聊天记录搜索界面
+ */
+function openChatSearchScreen() {
+    const chat = state.chats[state.activeChatId];
+    if (!chat) return;
+
+    // 清空旧的搜索条件和结果
+    document.getElementById('keyword-search-input').value = '';
+    document.getElementById('sender-search-select').innerHTML = '';
+    document.getElementById('date-search-input').value = '';
+    document.getElementById('search-results-list').innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 50px 0;">输入条件开始搜索</p>';
+
+    // 动态填充“人物”下拉菜单
+    const senderSelect = document.getElementById('sender-search-select');
+    senderSelect.innerHTML = '<option value="">所有人</option>'; // 默认选项
+
+    const myNickname = chat.isGroup ? (chat.settings.myNickname || '我') : '我';
+    const myOption = document.createElement('option');
+    myOption.value = myNickname;
+    myOption.textContent = myNickname;
+    senderSelect.appendChild(myOption);
+
+    if (chat.isGroup) {
+        chat.members.forEach(member => {
+            const memberOption = document.createElement('option');
+            memberOption.value = member.originalName; // 使用本名进行精确匹配
+            memberOption.textContent = member.groupNickname; // 显示群昵称给用户看
+            senderSelect.appendChild(memberOption);
+        });
+    } else {
+        const aiOption = document.createElement('option');
+        aiOption.value = chat.name;
+        aiOption.textContent = chat.name;
+        senderSelect.appendChild(aiOption);
+    }
+    
+    // 关闭聊天设置弹窗，并显示搜索界面
+    document.getElementById('chat-settings-modal').classList.remove('visible');
+    showScreen('chat-search-screen');
+}
+
+/**
+ * 执行聊天记录搜索的核心函数
+ */
+function performChatSearch() {
+    const chat = state.chats[state.activeChatId];
+    if (!chat) return;
+
+    const keyword = document.getElementById('keyword-search-input').value.trim().toLowerCase();
+    const sender = document.getElementById('sender-search-select').value;
+    const date = document.getElementById('date-search-input').value;
+
+    // 如果所有条件都为空，则不显示任何结果
+    if (!keyword && !sender && !date) {
+        document.getElementById('search-results-list').innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 50px 0;">输入条件开始搜索</p>';
+        return;
+    }
+    
+let results = chat.history.filter(msg => !msg.isHidden);
+
+    // 1. 按关键词过滤
+    if (keyword) {
+        results = results.filter(msg => {
+            let contentString = '';
+            if (typeof msg.content === 'string') {
+                contentString = msg.content;
+            } else if (msg.type === 'voice_message') {
+                contentString = msg.content; // 语音消息内容
+            } else if (msg.type === 'ai_image') {
+                contentString = msg.content; // 图片描述
+            }
+            return contentString.toLowerCase().includes(keyword);
+        });
+    }
+
+    // 2. 按人物过滤
+    if (sender) {
+        const myNickname = chat.isGroup ? (chat.settings.myNickname || '我') : '我';
+        results = results.filter(msg => {
+            if (msg.role === 'user') {
+                return sender === myNickname;
+            } else {
+                return msg.senderName === sender;
+            }
+        });
+    }
+
+    // 3. 按日期过滤
+    if (date) {
+        const targetDate = new Date(date);
+        const targetYear = targetDate.getFullYear();
+        const targetMonth = targetDate.getMonth();
+        const targetDay = targetDate.getDate();
+
+        results = results.filter(msg => {
+            const msgDate = new Date(msg.timestamp);
+            return msgDate.getFullYear() === targetYear &&
+                   msgDate.getMonth() === targetMonth &&
+                   msgDate.getDate() === targetDay;
+        });
+    }
+
+    renderSearchResults(results, keyword, chat);
+}
+
+/**
+ * 渲染搜索结果列表
+ * @param {Array} results - 过滤后的消息数组
+ * @param {string} keyword - 用于高亮显示的关键词
+ * @param {object} chat - 当前的聊天对象
+ */
+function renderSearchResults(results, keyword, chat) {
+    const listEl = document.getElementById('search-results-list');
+    listEl.innerHTML = '';
+
+    if (results.length === 0) {
+        listEl.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 50px 0;">未找到相关记录</p>';
+        return;
+    }
+
+    // 结果按时间倒序显示
+    results.reverse().forEach(msg => {
+        let senderName, avatarSrc;
+        const myNickname = chat.isGroup ? (chat.settings.myNickname || '我') : '我';
+        if (msg.role === 'user') {
+            senderName = myNickname;
+            avatarSrc = chat.settings.myAvatar || defaultAvatar;
+        } else {
+            if (chat.isGroup) {
+                const member = chat.members.find(m => m.originalName === msg.senderName);
+                senderName = member ? member.groupNickname : msg.senderName;
+                avatarSrc = member ? member.avatar : defaultGroupMemberAvatar;
+            } else {
+                senderName = chat.name;
+                avatarSrc = chat.settings.aiAvatar || defaultAvatar;
+            }
+        }
+
+        let snippet = (String(msg.content) || '[非文本消息]').substring(0, 100);
+        if (keyword) {
+            const regex = new RegExp(keyword, 'gi');
+            snippet = snippet.replace(regex, (match) => `<span class="highlight">${match}</span>`);
+        }
+
+        const item = document.createElement('div');
+        item.className = 'search-result-item';
+        item.dataset.timestamp = msg.timestamp; // 关键！存储时间戳用于跳转
+        item.innerHTML = `
+            <img src="${avatarSrc}" class="avatar">
+            <div class="result-content">
+                <div class="result-header">
+                    <span class="result-sender">${senderName}</span>
+                    <span class="result-timestamp">${formatDateStamp(msg.timestamp)}</span>
+                </div>
+                <div class="result-message-snippet">${snippet}...</div>
+            </div>
+        `;
+        listEl.appendChild(item);
+    });
+}
+// ▲▲▲ 新函数粘贴结束 ▲▲▲
+
+/**
+ * 跳转到聊天界面中的指定消息
+ * @param {number} timestamp - 目标消息的时间戳
+ */
+async function jumpToMessage(timestamp) {
+    const chat = state.chats[state.activeChatId];
+    if (!chat) return;
+
+    // 1. 切换回聊天界面
+    showScreen('chat-interface-screen');
+
+    // 2.【关键步骤】为了确保目标消息一定在DOM中，我们暂时放弃懒加载，
+    //    直接渲染出当前聊天的【全部】历史记录。
+    const messagesContainer = document.getElementById('chat-messages');
+    messagesContainer.innerHTML = ''; // 先清空
+    
+    let lastMessageTimestamp = null;
+    chat.history.forEach(msg => {
+        if (msg.isHidden) return;
+        
+        // 重新渲染日期戳
+        if (isNewDay(msg.timestamp, lastMessageTimestamp)) {
+            const dateStampEl = createDateStampElement(msg.timestamp);
+            messagesContainer.appendChild(dateStampEl);
+        }
+        
+        // 注意：这里的 appendMessage 的第三个参数要用 true，
+        // 表示是初始加载，避免不必要的进入动画。
+        appendMessage(msg, chat, true); 
+        lastMessageTimestamp = msg.timestamp;
+    });
+
+    // 3. 延迟一小会儿，确保DOM完全渲染完毕
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // 4. 找到目标消息元素 (这是我们上次修改过的正确代码)
+    const targetMessage = document.querySelector(`.message-bubble[data-timestamp="${timestamp}"]`)?.closest('.message-wrapper');
+
+    if (targetMessage) {
+        // 5. 平滑地滚动到目标位置
+        targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // 6. 【核心新增】添加短暂的高亮效果，让用户能注意到
+        const bubble = targetMessage.querySelector('.message-bubble');
+        if (bubble) {
+            bubble.classList.add('jump-highlight-animation');
+            // 动画结束后自动移除class，方便下次再次高亮
+            bubble.addEventListener('animationend', () => {
+                bubble.classList.remove('jump-highlight-animation');
+            }, { once: true });
+        }
+    } else {
+        alert("无法定位到该消息，可能已被删除。");
+    }
+}
+
+// ▼▼▼ 在你的JS功能函数定义区，粘贴下面这一整块新代码 ▼▼▼
+
+// --- 美化功能的核心变量 ---
+let activeThemeId = null; // 用于追踪当前正在编辑的主题ID
+
+/**
+ * 将CSS代码应用到页面上
+ * @param {string} cssCode - 要应用的CSS代码字符串
+ */
+function applyThemeCss(cssCode) {
+    const styleTag = document.getElementById('custom-theme-style');
+    if (styleTag) {
+        styleTag.innerHTML = cssCode || '';
+    }
+}
+
+/**
+ * 从数据库加载所有主题到下拉选择框
+ */
+async function loadThemesToDropdown() {
+    const selector = document.getElementById('theme-selector');
+    selector.innerHTML = '<option value="">-- 选择方案或新建 --</option>'; // 默认选项
+    
+    const themes = await db.themes.toArray();
+    themes.forEach(theme => {
+        const option = document.createElement('option');
+        option.value = theme.id;
+        option.textContent = theme.name;
+        selector.appendChild(option);
+    });
+}
+
+/**
+ * 处理用户从下拉框选择一个主题的逻辑
+ */
+async function handleThemeSelection() {
+    const selector = document.getElementById('theme-selector');
+    const editor = document.getElementById('theme-css-editor');
+    activeThemeId = selector.value ? parseInt(selector.value) : null;
+    
+    if (activeThemeId) {
+        const theme = await db.themes.get(activeThemeId);
+        editor.value = theme.css;
+    } else {
+        // 如果选择“--”，就加载模板
+        editor.value = THEME_CSS_TEMPLATE;
+    }
+    // 立即应用选中的或模板代码，让用户看到效果
+    applyThemeCss(editor.value);
+}
+
+/**
+ * 保存当前编辑区的内容到当前选中的主题
+ */
+async function saveCurrentTheme() {
+    if (!activeThemeId) {
+        alert("请先选择一个方案，或使用“另存为”来创建新方案。");
+        return;
+    }
+    const cssCode = document.getElementById('theme-css-editor').value;
+    await db.themes.update(activeThemeId, { css: cssCode });
+    alert("当前方案已保存！");
+}
+
+/**
+ * 将当前编辑区的内容另存为一个新主题
+ */
+async function saveAsNewTheme() {
+    const themeName = await showCustomPrompt("保存新方案", "请输入新方案的名称");
+    if (!themeName || !themeName.trim()) {
+        if(themeName !== null) alert("方案名称不能为空！");
+        return;
+    }
+    const cssCode = document.getElementById('theme-css-editor').value;
+    const newTheme = { name: themeName.trim(), css: cssCode };
+    const newId = await db.themes.add(newTheme);
+    
+    // 刷新下拉框并自动选中新保存的方案
+    await loadThemesToDropdown();
+    document.getElementById('theme-selector').value = newId;
+    activeThemeId = newId;
+    
+    alert(`方案 "${themeName}" 已成功保存！`);
+}
+
+/**
+ * 重命名当前选中的主题
+ */
+async function renameSelectedTheme() {
+    if (!activeThemeId) {
+        alert("请先选择一个要重命名的方案。");
+        return;
+    }
+    const currentTheme = await db.themes.get(activeThemeId);
+    const newName = await showCustomPrompt("重命名方案", "请输入新的名称", currentTheme.name);
+    if (newName && newName.trim()) {
+        await db.themes.update(activeThemeId, { name: newName.trim() });
+        await loadThemesToDropdown();
+        document.getElementById('theme-selector').value = activeThemeId;
+        alert("重命名成功！");
+    }
+}
+
+/**
+ * 删除当前选中的主题
+ */
+async function deleteSelectedTheme() {
+    if (!activeThemeId) {
+        alert("请先选择一个要删除的方案。");
+        return;
+    }
+    const confirmed = await showCustomConfirm(
+        "确认删除", 
+        `确定要删除方案 "${document.getElementById('theme-selector').selectedOptions[0].textContent}" 吗？`,
+        { confirmButtonClass: 'btn-danger' }
+    );
+    if (confirmed) {
+        await db.themes.delete(activeThemeId);
+        activeThemeId = null;
+        await loadThemesToDropdown();
+        // 恢复到模板状态
+        document.getElementById('theme-css-editor').value = THEME_CSS_TEMPLATE;
+        applyThemeCss(THEME_CSS_TEMPLATE);
+        alert("方案已删除。");
+    }
+}
+
+/**
+ * 导出当前选中的主题为一个JSON文件
+ */
+async function exportTheme() {
+    if (!activeThemeId) {
+        alert("请先选择一个要导出的方案。");
+        return;
+    }
+    const theme = await db.themes.get(activeThemeId);
+    const exportData = {
+        themeName: theme.name,
+        themeCss: theme.css
+    };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${theme.name}-Theme.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+/**
+ * 导入一个主题JSON文件
+ */
+function importTheme(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (data.themeName && typeof data.themeCss !== 'undefined') {
+                // 为了避免重名，导入时可以在名字后面加个 "(导入)"
+                const newTheme = {
+                    name: `${data.themeName} (导入)`,
+                    css: data.themeCss
+                };
+                const newId = await db.themes.add(newTheme);
+                await loadThemesToDropdown();
+                document.getElementById('theme-selector').value = newId;
+                handleThemeSelection(); // 导入后自动选中并应用
+                alert(`方案 "${newTheme.name}" 导入成功！`);
+            } else {
+                alert("导入失败：文件格式不正确。");
+            }
+        } catch (error) {
+            alert(`导入失败：文件解析错误。 ${error.message}`);
+        }
+    };
+    reader.readAsText(file);
+}
+
+// ▲▲▲ 新函数粘贴结束 ▲▲▲
+
+// ▼▼▼ 【全新】API预设功能核心函数 ▼▼▼
+
+/**
+ * 渲染并填充API预设的下拉选择框
+ */
+function renderApiPresetSelector() {
+    const selectEl = document.getElementById('api-preset-select');
+    if (!selectEl) return;
+
+    selectEl.innerHTML = '<option value="">-- 自定义配置 --</option>';
+
+    if (state.apiPresets) {
+        state.apiPresets.forEach(preset => {
+            const option = document.createElement('option');
+            option.value = preset.id;
+            option.textContent = preset.name;
+            selectEl.appendChild(option);
+        });
+    }
+
+    // 检查当前配置是否匹配任何一个预设
+    const { proxyUrl, apiKey } = state.apiConfig;
+    const matchingPreset = state.apiPresets ? state.apiPresets.find(p => p.proxyUrl === proxyUrl && p.apiKey === apiKey) : null;
+
+    if (matchingPreset) {
+        selectEl.value = matchingPreset.id;
+    } else {
+        selectEl.value = ""; // 如果不匹配任何预设，则选中“自定义配置”
+    }
+}
+
+/**
+ * 当用户在下拉框中选择一个预设时触发
+ */
+function handleApiPresetSelectChange() {
+    const selectEl = document.getElementById('api-preset-select');
+    const proxyUrlInput = document.getElementById('proxy-url');
+    const apiKeyInput = document.getElementById('api-key');
+    const selectedId = parseInt(selectEl.value);
+
+    if (selectedId && state.apiPresets) {
+        const selectedPreset = state.apiPresets.find(p => p.id === selectedId);
+        if (selectedPreset) {
+            proxyUrlInput.value = selectedPreset.proxyUrl;
+            apiKeyInput.value = selectedPreset.apiKey;
+        }
+    }
+}
+
+/**
+ * 打开预设管理的操作菜单
+ */
+async function openApiPresetManager() {
+    const selectEl = document.getElementById('api-preset-select');
+    const selectedId = parseInt(selectEl.value);
+    const selectedPreset = state.apiPresets ? state.apiPresets.find(p => p.id === selectedId) : null;
+
+    const modal = document.getElementById('preset-actions-modal');
+    const footer = modal.querySelector('.custom-modal-footer');
+
+    footer.innerHTML = `
+        <button id="preset-action-save-new">保存当前配置为新预设</button>
+        <button id="preset-action-update-current" ${!selectedPreset ? 'disabled' : ''}>更新当前配置</button>
+        <button id="preset-action-delete-current" class="btn-danger" ${!selectedPreset ? 'disabled' : ''}>删除当前配置</button>
+        <button id="preset-action-cancel" style="margin-top: 8px; border-radius: 8px; background-color: #f0f0f0;">取消</button>
+    `;
+
+    document.getElementById('preset-action-save-new').addEventListener('click', saveCurrentApiConfigAsPreset);
+    if (selectedPreset) {
+        document.getElementById('preset-action-update-current').addEventListener('click', () => updateSelectedApiPreset(selectedId));
+        document.getElementById('preset-action-delete-current').addEventListener('click', () => deleteSelectedApiPreset(selectedId));
+    }
+    document.getElementById('preset-action-cancel').addEventListener('click', () => modal.classList.remove('visible'));
+
+    modal.classList.add('visible');
+}
+
+/**
+ * 将当前输入框的内容保存为一个新的预设
+ */
+async function saveCurrentApiConfigAsPreset() {
+    const proxyUrl = document.getElementById('proxy-url').value.trim();
+    const apiKey = document.getElementById('api-key').value.trim();
+
+    if (!proxyUrl || !apiKey) {
+        alert('代理地址和密钥都不能为空！');
+        return;
+    }
+
+    const name = await showCustomPrompt('保存API预设', '请为这个配置起个名字：');
+    if (name && name.trim()) {
+        const newPreset = { name: name.trim(), proxyUrl, apiKey };
+        const newId = await db.apiPresets.add(newPreset);
+        
+        if (!state.apiPresets) state.apiPresets = [];
+        state.apiPresets.push({ id: newId, ...newPreset });
+
+        renderApiPresetSelector(); 
+        document.getElementById('api-preset-select').value = newId; 
+        document.getElementById('preset-actions-modal').classList.remove('visible');
+        await showCustomAlert('成功', `API预设 "${name.trim()}" 已保存！`);
+    }
+}
+
+/**
+ * 更新当前选中的预设
+ */
+async function updateSelectedApiPreset(presetId) {
+    const proxyUrl = document.getElementById('proxy-url').value.trim();
+    const apiKey = document.getElementById('api-key').value.trim();
+
+    if (!proxyUrl || !apiKey) {
+        alert('代理地址和密钥都不能为空！');
+        return;
+    }
+
+    const preset = state.apiPresets.find(p => p.id === presetId);
+    if (preset) {
+        preset.proxyUrl = proxyUrl;
+        preset.apiKey = apiKey;
+        await db.apiPresets.put(preset);
+        document.getElementById('preset-actions-modal').classList.remove('visible');
+        await showCustomAlert('成功', `预设 "${preset.name}" 已更新！`);
+    }
+}
+
+/**
+ * 删除当前选中的预设
+ */
+async function deleteSelectedApiPreset(presetId) {
+    const preset = state.apiPresets.find(p => p.id === presetId);
+    if (preset) {
+        const confirmed = await showCustomConfirm('确认删除', `确定要删除API预设 "${preset.name}" 吗？`, { confirmButtonClass: 'btn-danger' });
+        if (confirmed) {
+            await db.apiPresets.delete(presetId);
+            state.apiPresets = state.apiPresets.filter(p => p.id !== presetId);
+
+            renderApiPresetSelector();
+            document.getElementById('preset-actions-modal').classList.remove('visible');
+            await showCustomAlert('成功', '预设已删除。');
+        }
+    }
+}
+
+// ▼▼▼ 【全新】气泡样式预设功能的核心函数 ▼▼▼
+
+/**
+ * 渲染并填充气泡样式预设的下拉选择框
+ */
+function renderBubblePresetSelector() {
+    const selectEl = document.getElementById('bubble-style-preset-select');
+    const customCssInput = document.getElementById('custom-css-input');
+
+    selectEl.innerHTML = '<option value="">-- 无预设 --</option>';
+
+    if (state.bubbleStylePresets) {
+        state.bubbleStylePresets.forEach(preset => {
+            const option = document.createElement('option');
+            option.value = preset.id;
+            option.textContent = preset.name;
+            selectEl.appendChild(option);
+        });
+    }
+
+    // 检查当前聊天的CSS是否匹配任何一个预设
+    const currentCss = customCssInput.value.trim();
+    const matchingPreset = state.bubbleStylePresets ? state.bubbleStylePresets.find(p => p.css.trim() === currentCss) : null;
+
+    if (matchingPreset) {
+        selectEl.value = matchingPreset.id;
+    } else {
+        selectEl.value = ""; // 如果不匹配任何预设，则选中“无预设”
+    }
+}
+
+/**
+ * 当用户在下拉框中选择一个预设时触发
+ */
+function handlePresetSelectChange() {
+    const selectEl = document.getElementById('bubble-style-preset-select');
+    const customCssInput = document.getElementById('custom-css-input');
+    const selectedId = parseInt(selectEl.value);
+
+    if (selectedId && state.bubbleStylePresets) {
+        const selectedPreset = state.bubbleStylePresets.find(p => p.id === selectedId);
+        if (selectedPreset) {
+            customCssInput.value = selectedPreset.css;
+        }
+    }
+    updateSettingsPreview(); // 无论如何都更新预览
+}
+
+/**
+ * 打开预设管理的操作菜单
+ */
+async function openBubblePresetManager() {
+    const selectEl = document.getElementById('bubble-style-preset-select');
+    const selectedId = parseInt(selectEl.value);
+    const selectedPreset = state.bubbleStylePresets ? state.bubbleStylePresets.find(p => p.id === selectedId) : null;
+
+    const modal = document.getElementById('preset-actions-modal'); // 复用现有模态框
+    const footer = modal.querySelector('.custom-modal-footer');
+
+    footer.innerHTML = `
+        <button id="preset-action-save-new">保存</button>
+        <button id="preset-action-update-current" ${!selectedPreset ? 'disabled' : ''}>更新</button>
+        <button id="preset-action-delete-current" class="btn-danger" ${!selectedPreset ? 'disabled' : ''}>删除</button>
+        <button id="preset-action-cancel" style="margin-top: 8px; border-radius: 8px; background-color: #f0f0f0;">取消</button>
+    `;
+
+    // 重新绑定事件
+    document.getElementById('preset-action-save-new').addEventListener('click', saveCurrentCssAsPreset);
+    if (selectedPreset) {
+        document.getElementById('preset-action-update-current').addEventListener('click', () => updateSelectedPreset(selectedId));
+        document.getElementById('preset-action-delete-current').addEventListener('click', () => deleteSelectedPreset(selectedId));
+    }
+    document.getElementById('preset-action-cancel').addEventListener('click', () => modal.classList.remove('visible'));
+
+    modal.classList.add('visible');
+}
+
+/**
+ * 将当前CSS文本框的内容保存为一个新的预设
+ */
+async function saveCurrentCssAsPreset() {
+    const customCssInput = document.getElementById('custom-css-input');
+    const css = customCssInput.value.trim();
+    if (!css) {
+        alert('CSS内容不能为空！');
+        return;
+    }
+
+    const name = await showCustomPrompt('保存预设', '请为这个气泡样式命名：');
+    if (name && name.trim()) {
+        const newPreset = { name: name.trim(), css: css };
+        const newId = await db.bubbleStylePresets.add(newPreset);
+        
+        if (!state.bubbleStylePresets) state.bubbleStylePresets = [];
+        state.bubbleStylePresets.push({ id: newId, ...newPreset });
+
+        renderBubblePresetSelector(); 
+        document.getElementById('bubble-style-preset-select').value = newId; 
+        document.getElementById('preset-actions-modal').classList.remove('visible');
+        await showCustomAlert('成功', `预设 "${name.trim()}" 已保存！`);
+    }
+}
+
+/**
+ * 更新当前选中的预设
+ */
+async function updateSelectedPreset(presetId) {
+    const customCssInput = document.getElementById('custom-css-input');
+    const css = customCssInput.value.trim();
+
+    const preset = state.bubbleStylePresets.find(p => p.id === presetId);
+    if (preset) {
+        preset.css = css;
+        await db.bubbleStylePresets.put(preset);
+        document.getElementById('preset-actions-modal').classList.remove('visible');
+        await showCustomAlert('成功', `预设 "${preset.name}" 已更新！`);
+    }
+}
+
+/**
+ * 删除当前选中的预设
+ */
+async function deleteSelectedPreset(presetId) {
+    const preset = state.bubbleStylePresets.find(p => p.id === presetId);
+    if (preset) {
+        const confirmed = await showCustomConfirm('确认删除', `确定要删除预设 "${preset.name}" 吗？`, { confirmButtonClass: 'btn-danger' });
+        if (confirmed) {
+            await db.bubbleStylePresets.delete(presetId);
+            state.bubbleStylePresets = state.bubbleStylePresets.filter(p => p.id !== presetId);
+
+            renderBubblePresetSelector(); 
+            document.getElementById('custom-css-input').value = '';
+            updateSettingsPreview();
+
+            document.getElementById('preset-actions-modal').classList.remove('visible');
+            await showCustomAlert('成功', '预设已删除。');
+        }
+    }
+}
+
+// ▼▼▼ 【全新】来电铃声控制函数 ▼▼▼
+
+/**
+ * 播放来电铃声
+ */
+function playRingtone() {
+    const ringtonePlayer = document.getElementById('ringtone-player');
+    // 优先使用用户在设置中保存的URL，如果没设置，就用我们预设的URL
+    const ringtoneUrl = state.globalSettings.ringtoneUrl || 'https://files.catbox.moe/3w7gla.mp3';
+    
+    if (ringtonePlayer && ringtoneUrl) {
+        ringtonePlayer.src = ringtoneUrl;
+        // play() 返回一个 Promise，我们最好用 try...catch 包裹以防止浏览器报错
+        const playPromise = ringtonePlayer.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.error("铃声播放失败:", error);
+                // 可以在这里给用户一个静音提示，如果需要的话
+            });
+        }
+    }
+}
+
+/**
+ * 停止并重置来电铃声
+ */
+function stopRingtone() {
+    const ringtonePlayer = document.getElementById('ringtone-player');
+    if (ringtonePlayer) {
+        ringtonePlayer.pause();
+        ringtonePlayer.currentTime = 0; // 将播放进度重置到开头
+    }
+}
+// ▲▲▲ 新函数粘贴结束 ▲▲▲
+
+// ▼▼▼ 【全新】音频上下文解锁函数（修复铃声无法自动播放的问题） ▼▼▼
+function unlockAudioContext() {
+    const ringtonePlayer = document.getElementById('ringtone-player');
+    // 检查播放器是否处于暂停状态，并且我们之前没有成功播放过
+    if (ringtonePlayer && ringtonePlayer.paused) {
+        // 尝试播放，然后立刻暂停。
+        // 这个操作对用户是无感知的，但能告诉浏览器用户已与音频交互。
+        ringtonePlayer.play().catch(() => {}); // play() 会返回一个 Promise，我们忽略任何可能发生的错误
+        ringtonePlayer.pause();
+        console.log("Ringtone audio context unlocked.");
+    }
+}
+// ▲▲▲ 新函数粘贴结束 ▲▲▲
+
+// ▼▼▼ 【全新】锁屏功能核心函数 ▼▼▼
+
+/**
+ * 应用锁屏壁纸到 #lock-screen 元素
+ */
+function applyLockscreenWallpaper() {
+    const lockScreen = document.getElementById('lock-screen');
+    const wallpaper = state.globalSettings.lockscreenWallpaper;
+    if (wallpaper && wallpaper.startsWith('data:image')) {
+        lockScreen.style.backgroundImage = `url(${wallpaper})`;
+    } else if (wallpaper) {
+        lockScreen.style.backgroundImage = wallpaper;
+    }
+}
+
+/**
+ * 显示锁屏界面
+ */
+function lockPhone() {
+    console.log("正在锁定手机...");
+    isLocked = true;
+    document.getElementById('lock-screen').classList.add('active');
+    document.querySelectorAll('.screen:not(#lock-screen)').forEach(s => s.classList.remove('active'));
+}
+
+/**
+ * 解锁手机，显示主屏幕
+ */
+function unlockPhone() {
+    console.log("手机已解锁！");
+    isLocked = false;
+        // 【核心修改】在这里彻底隐藏锁屏和毛玻璃背景
+    document.getElementById('lock-screen').classList.remove('active');
+    const blurBg = document.getElementById('lock-screen-background-blur');
+    blurBg.style.display = 'none';
+    blurBg.style.opacity = '0';
+
+    // 确保主屏幕是唯一激活的顶层屏幕
+    showScreen('home-screen'); 
+
+    // 重置锁屏的样式，为下次锁定做准备
+    setTimeout(() => {
+        const lockScreen = document.getElementById('lock-screen');
+        const unlockHint = document.getElementById('unlock-hint');
+        lockScreen.style.transition = 'none'; 
+        unlockHint.style.transition = 'none';
+        lockScreen.style.transform = 'translateY(0)';
+        lockScreen.offsetHeight; 
+        lockScreen.style.transition = 'transform 0.3s ease-out';
+        unlockHint.style.transition = 'opacity 0.3s ease-out';
+    }, 500); 
+}
+
+/**
+ * 显示密码输入弹窗
+ */
+function showPasswordModal() {
+    const modal = document.getElementById('password-modal-overlay');
+    const input = document.getElementById('password-input-field');
+    input.value = ''; // 清空上次输入
+    modal.classList.add('visible');
+    setTimeout(() => input.focus(), 100); // 延迟聚焦，确保动画流畅
+}
+
+/**
+ * 隐藏密码输入弹窗
+ */
+function hidePasswordModal() {
+
+document.getElementById('password-modal-overlay').style.backgroundImage = 'none';
+
+    const modal = document.getElementById('password-modal-overlay');
+    modal.classList.remove('visible');
+    // 移除可能存在的错误动画类
+    modal.querySelector('.password-modal-content').classList.remove('error');
+    // 【核心修改】当取消输入密码时...
+    // 1. 隐藏毛玻璃背景
+    const blurBg = document.getElementById('lock-screen-background-blur');
+    blurBg.style.opacity = '0';
+    setTimeout(() => { blurBg.style.display = 'none'; }, 300); // 动画结束后再隐藏
+
+    // 2. 让锁屏界面滑回来
+    const lockScreen = document.getElementById('lock-screen');
+    const unlockHint = document.getElementById('unlock-hint');
+    lockScreen.style.transform = 'translateY(0)';
+    unlockHint.style.opacity = '1';
+}
+
+/**
+ * 检查用户输入的密码是否正确
+ */
+function checkPassword() {
+    const input = document.getElementById('password-input-field');
+    const enteredPassword = input.value;
+    const correctPassword = state.globalSettings.password;
+
+    if (enteredPassword === correctPassword) {
+        // --- 密码正确 ---
+
+        // 1. 【核心魔术】提前把主屏幕在最底层激活并准备好！
+        //    因为它 z-index 最低，所以你暂时还看不到它。
+        showScreen('home-screen');
+
+        // 2. 隐藏密码输入框 (它会自己播放淡出动画)
+        document.getElementById('password-modal-overlay').classList.remove('visible');
+        
+        // 3. 让毛玻璃背景也开始淡出
+        document.getElementById('lock-screen-background-blur').style.opacity = '0';
+        
+        // 4. 等待淡出动画播放完毕 (300毫秒)，再执行最终的清理工作
+        setTimeout(unlockPhone, 300);
+
+    } else {
+        // --- 密码错误 (逻辑保持不变) ---
+        const content = document.querySelector('.password-modal-content');
+        content.classList.add('error');
+        input.value = '';
+        setTimeout(() => content.classList.remove('error'), 400);
+    }
+}
+
+/**
+ * 更新锁屏界面的时钟
+ */
+function updateLockClock() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+    const dateString = now.toLocaleDateString('zh-CN', { weekday: 'long', month: 'long', day: 'numeric' });
+    document.getElementById('lock-main-time').textContent = timeString;
+    document.getElementById('lock-main-date').textContent = dateString;
+}
+
+// ▲▲▲ 新函数粘贴结束 ▲▲▲
+
         // ===================================================================
         // 4. 初始化函数 init()
         // ===================================================================
@@ -12881,6 +15539,17 @@ async function deleteCategory(categoryId) {
                 applyCustomFont(state.globalSettings.fontUrl);
             }
 
+    // ▼▼▼ 在这里粘贴新代码 ▼▼▼
+    // 【核心修复】初始化时，自动加载并应用已保存的主题
+    if (state.globalSettings.activeThemeId) {
+        const activeTheme = await db.themes.get(state.globalSettings.activeThemeId);
+        if (activeTheme) {
+            console.log(`正在应用已保存的主题: "${activeTheme.name}"`);
+            applyThemeCss(activeTheme.css);
+        }
+    }
+    // ▲▲▲ 新代码粘贴结束 ▲▲▲
+
             updateClock();
             setInterval(updateClock, 1000 * 30);
             applyGlobalWallpaper();
@@ -12892,6 +15561,9 @@ applyAppIcons();
             // --- 各种事件监听器 ---
             // ==========================================================
 
+// ▼▼▼ 在 init() 的事件监听器区域，粘贴这行新代码 ▼▼▼
+document.getElementById('phone-screen').addEventListener('click', unlockAudioContext, { once: true });
+// ▲▲▲ 新代码粘贴结束 ▲▲▲
             document.getElementById('custom-modal-cancel').addEventListener('click', hideCustomModal);
             document.getElementById('custom-modal-overlay').addEventListener('click', (e) => { if (e.target === modalOverlay) hideCustomModal(); });
             document.getElementById('export-data-btn').addEventListener('click', exportBackup);
@@ -12910,7 +15582,8 @@ exitSelectionMode(); state.activeChatId = null; showScreen('chat-list-screen'); 
 const newChat = { 
     id: newChatId, 
     name: name.trim(), 
-    isGroup: false,                         relationship: {
+isGroup: false,
+isPinned: false,                    relationship: {
                             status: 'friend', // 'friend', 'blocked_by_user', 'pending_user_approval'
                             blockedTimestamp: null,
                             applicationReason: ''
@@ -13007,13 +15680,34 @@ document.getElementById('save-wallpaper-btn').addEventListener('click', async ()
         changesMade = true;
     }
 
-    // 【核心修改】保存图标设置（它已经在内存中了，我们只需要把整个globalSettings存起来）
+    // 保存锁屏壁纸 (新增)
+    if (newLockscreenWallpaperBase64) {
+        state.globalSettings.lockscreenWallpaper = newLockscreenWallpaperBase64;
+        changesMade = true;
+    }
+    // 保存密码 (新增)
+    const newPassword = document.getElementById('password-set-input').value;
+    state.globalSettings.password = newPassword;
+
+state.globalSettings.ringtoneUrl = document.getElementById('ringtone-url-input').value.trim();
+
+    // ▼▼▼ 在这里添加新代码 ▼▼▼
+    // 记录当前激活的主题ID
+    const activeThemeSelector = document.getElementById('theme-selector');
+    if (activeThemeSelector.value) {
+        state.globalSettings.activeThemeId = parseInt(activeThemeSelector.value);
+    } else {
+        // 如果用户选择的是“-- 选择方案或新建 --”，就清空记录
+        state.globalSettings.activeThemeId = null;
+    }
+    // ▲▲▲ 新代码添加结束 ▲▲▲
+    
     await db.globalSettings.put(state.globalSettings);
 
     // 应用所有更改
     if (changesMade) {
-        applyGlobalWallpaper();
-        newWallpaperBase64 = null;
+        applyGlobalWallpaper();        applyLockscreenWallpaper(); // <-- 新增
+        newWallpaperBase64 = null;        newLockscreenWallpaperBase64 = null; // <-- 新增
     }
     applyAppIcons(); // 重新应用所有图标
 
@@ -13021,7 +15715,19 @@ document.getElementById('save-wallpaper-btn').addEventListener('click', async ()
     showScreen('home-screen');
 });
 // ▲▲▲ 替换结束 ▲▲▲
-            document.getElementById('save-api-settings-btn').addEventListener('click', async () => { state.apiConfig.proxyUrl = document.getElementById('proxy-url').value.trim(); state.apiConfig.apiKey = document.getElementById('api-key').value.trim(); state.apiConfig.model = document.getElementById('model-select').value; await db.apiConfig.put(state.apiConfig); 
+            document.getElementById('save-api-settings-btn').addEventListener('click', async () => { 
+
+// ▼▼▼ 在这里粘贴新代码 ▼▼▼
+const proxyUrlToCheck = document.getElementById('proxy-url').value.trim();
+const isBlocked = BLOCKED_API_SITES.some(blockedDomain => proxyUrlToCheck.includes(blockedDomain));
+
+if (isBlocked) {
+    alert('错误：该 API 站点已被禁用，无法使用。');
+    return; // 阻止保存
+}
+// ▲▲▲ 新代码粘贴结束 ▲▲▲
+
+state.apiConfig.proxyUrl = document.getElementById('proxy-url').value.trim(); state.apiConfig.apiKey = document.getElementById('api-key').value.trim(); state.apiConfig.model = document.getElementById('model-select').value; await db.apiConfig.put(state.apiConfig); 
 
 // 在 'save-api-settings-btn' 的 click 事件监听器内部
 // await db.apiConfig.put(state.apiConfig); 这行之后
@@ -13317,6 +16023,11 @@ worldBookCheckboxesContainer.addEventListener('change', (e) => {
     customCssInput.value = chat.settings.customCss || '';
     
     updateSettingsPreview(); 
+
+// 【这三行就是我们新加的，现在已经放在正确的位置了】
+renderBubblePresetSelector();
+document.getElementById('bubble-style-preset-select').addEventListener('change', handlePresetSelectChange);
+document.getElementById('manage-bubble-presets-btn').addEventListener('click', openBubblePresetManager);
     document.getElementById('chat-settings-modal').classList.add('visible');
 });
 // ▲▲▲ 替换结束 ▲▲▲
@@ -14503,6 +17214,7 @@ document.getElementById('join-call-btn').addEventListener('click', handleUserJoi
 // ▼▼▼ 用这个【已修复并激活旁观模式】的版本替换旧的 decline-call-btn 事件监听器 ▼▼▼
 // 绑定来电请求的“拒绝”按钮
 document.getElementById('decline-call-btn').addEventListener('click', async () => {
+    stopRingtone(); // <-- 在这里添加这一行
     hideIncomingCallModal();
     const chat = state.chats[videoCallState.activeChatId];
     if (!chat) return;
@@ -14546,6 +17258,7 @@ document.getElementById('decline-call-btn').addEventListener('click', async () =
 // ▼▼▼ 用这个【已修复重复头像BUG】的版本替换旧的 accept-call-btn 事件监听器 ▼▼▼
 // 绑定来电请求的“接听”按钮
 document.getElementById('accept-call-btn').addEventListener('click', async () => {
+    stopRingtone(); // <-- 在这里添加这一行
     hideIncomingCallModal();
     
     videoCallState.initiator = 'ai';
@@ -15259,10 +17972,394 @@ document.getElementById('existing-categories-list').addEventListener('click', (e
 });
 // ▲▲▲ 新代码粘贴结束 ▲▲▲
 
-        // ===================================================================
-        // 5. 启动！
+// --- ▼▼▼ 【全新】自定义头像框功能事件绑定 ▼▼▼ ---
+
+// 打开“选择”弹窗的按钮
+document.getElementById('chat-settings-modal').addEventListener('click', (e) => {
+    if (e.target.classList.contains('change-frame-btn')) {
+        openFrameSelectorModal(e.target.dataset.type);
+    }
+});
+document.getElementById('member-settings-modal').addEventListener('click', (e) => {
+    if (e.target.classList.contains('change-frame-btn')) {
+        openFrameSelectorModal('member', editingMemberId);
+    }
+});
+
+// “选择”弹窗内的按钮
+// “选择”弹窗内的按钮（已修正）
+document.getElementById('manage-custom-frames-btn').addEventListener('click', () => {
+    // 1. 先关闭当前的选择弹窗
+    document.getElementById('avatar-frame-modal').classList.remove('visible');
+    
+    // 2. 然后再打开管理弹窗
+    openFrameManager();
+});
+document.getElementById('cancel-frame-settings-btn').addEventListener('click', () => document.getElementById('avatar-frame-modal').classList.remove('visible'));
+document.getElementById('save-frame-settings-btn').addEventListener('click', saveSelectedFrames);
+
+// “管理”弹窗内的按钮
+document.getElementById('upload-custom-frame-btn').addEventListener('click', handleUploadCustomFrame);
+document.getElementById('close-frame-manager-btn').addEventListener('click', () => {
+    document.getElementById('custom-frame-manager-modal').classList.remove('visible');
+    // 关闭管理后，刷新选择界面，因为列表可能变了
+    openFrameSelectorModal(currentFrameSelection.type, currentFrameSelection.target);
+});
+
+// ▲▲▲ 新事件绑定结束 ▲▲▲
+
+// ▼▼▼ 【全新】聊天列表左滑功能JS逻辑 ▼▼▼
+const chatListEl = document.getElementById('chat-list');
+let chatSwipeState = { isDragging: false, startX: 0, activeContent: null };
+
+// 关闭所有已滑开的项
+function resetAllChatSwipes(exceptThisOne = null) {
+    document.querySelectorAll('.chat-list-item-content.swiped').forEach(content => {
+        if (content !== exceptThisOne) {
+            content.classList.remove('swiped');
+        }
+    });
+}
+
+chatListEl.addEventListener('mousedown', (e) => {
+    const content = e.target.closest('.chat-list-item-content');
+    if (content) {
+        resetAllChatSwipes(content);
+        chatSwipeState.isDragging = true;
+        chatSwipeState.startX = e.pageX;
+        chatSwipeState.activeContent = content;
+        // 阻止拖动时选中文本
+        e.preventDefault();
+    }
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!chatSwipeState.isDragging || !chatSwipeState.activeContent) return;
+    const diffX = e.pageX - chatSwipeState.startX;
+    if (diffX < 0 && diffX > -170) { // 只允许向左滑, 限制最大距离
+        chatSwipeState.activeContent.style.transition = 'none'; // 滑动时禁用动画
+        chatSwipeState.activeContent.style.transform = `translateX(${diffX}px)`;
+    }
+});
+
+document.addEventListener('mouseup', (e) => {
+    if (!chatSwipeState.isDragging || !chatSwipeState.activeContent) return;
+    
+    chatSwipeState.activeContent.style.transition = 'transform 0.3s ease';
+    const transformStyle = window.getComputedStyle(chatSwipeState.activeContent).transform;
+    const currentTranslateX = new DOMMatrix(transformStyle).m41;
+
+    if (currentTranslateX < -60) { // 滑动超过阈值
+        chatSwipeState.activeContent.classList.add('swiped');
+    } else {
+        chatSwipeState.activeContent.classList.remove('swiped');
+    }
+    chatSwipeState.activeContent.style.transform = ''; // 清除内联样式，交由CSS class控制
+
+    // 重置状态
+    chatSwipeState.isDragging = false;
+    chatSwipeState.activeContent = null;
+});
+
+// 移动端触摸事件的兼容
+chatListEl.addEventListener('touchstart', (e) => {
+     const content = e.target.closest('.chat-list-item-content');
+    if (content) {
+        resetAllChatSwipes(content);
+        chatSwipeState.isDragging = true;
+        chatSwipeState.startX = e.touches[0].pageX;
+        chatSwipeState.activeContent = content;
+    }
+}, { passive: true });
+
+chatListEl.addEventListener('touchmove', (e) => {
+    if (!chatSwipeState.isDragging || !chatSwipeState.activeContent) return;
+    const diffX = e.touches[0].pageX - chatSwipeState.startX;
+     if (diffX < 0 && diffX > -170) {
+        chatSwipeState.activeContent.style.transition = 'none';
+        chatSwipeState.activeContent.style.transform = `translateX(${diffX}px)`;
+    }
+}, { passive: true });
+
+chatListEl.addEventListener('touchend', (e) => {
+    if (!chatSwipeState.isDragging || !chatSwipeState.activeContent) return;
+    
+    chatSwipeState.activeContent.style.transition = 'transform 0.3s ease';
+    const transformStyle = window.getComputedStyle(chatSwipeState.activeContent).transform;
+    const currentTranslateX = new DOMMatrix(transformStyle).m41;
+
+    if (currentTranslateX < -60) {
+        chatSwipeState.activeContent.classList.add('swiped');
+    } else {
+        chatSwipeState.activeContent.classList.remove('swiped');
+    }
+    chatSwipeState.activeContent.style.transform = '';
+
+    chatSwipeState.isDragging = false;
+    chatSwipeState.activeContent = null;
+});
+// ▲▲▲ 新JS逻辑粘贴结束 ▲▲▲
+
+// ▼▼▼ 【全新】聊天列表操作按钮点击事件 ▼▼▼
+chatListEl.addEventListener('click', async (e) => {
+    const target = e.target;
+    if (target.classList.contains('swipe-action-btn')) {
+        const container = target.closest('.chat-list-item-swipe-container');
+        if (!container) return;
+
+        const chatId = container.dataset.chatId;
+        const chat = state.chats[chatId];
+        if (!chat) return;
+
+        if (target.classList.contains('pin') || target.classList.contains('unpin')) {
+            // 置顶或取消置顶
+            chat.isPinned = !chat.isPinned;
+            await db.chats.put(chat);
+            await renderChatList(); // 重新渲染列表以更新排序
+        } else if (target.classList.contains('delete')) {
+            // 删除
+            const confirmed = await showCustomConfirm('删除对话', `确定要删除与 "${chat.name}" 的整个对话吗？此操作不可撤销。`, { confirmButtonClass: 'btn-danger' });
+            if (confirmed) {
+                if (musicState.isActive && musicState.activeChatId === chat.id) await endListenTogetherSession(false);
+                delete state.chats[chat.id];
+                if (state.activeChatId === chat.id) state.activeChatId = null;
+                await db.chats.delete(chat.id);
+                await renderChatList();
+            } else {
+                // 如果取消删除，则把滑块收回去
+                const content = container.querySelector('.chat-list-item-content');
+                if (content) content.classList.remove('swiped');
+            }
+        }
+    }
+});
+// ▲▲▲ 新事件监听粘贴结束 ▲▲▲
+
+// ▼▼▼ 在 init() 的事件监听器区域末尾添加 ▼▼▼
+
+// 绑定“查找聊天记录”按钮
+document.getElementById('chat-settings-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'find-history-btn') {
+        openChatSearchScreen();
+    }
+});
+
+// 绑定搜索页面的返回按钮
+document.getElementById('search-back-btn').addEventListener('click', () => {
+    // 返回到聊天设置弹窗
+    showScreen('chat-interface-screen'); 
+    document.getElementById('chat-settings-modal').classList.add('visible');
+});
+
+// ▲▲▲ 新代码粘贴结束 ▲▲▲
+
+// ▼▼▼ 在 init() 的事件监听器区域末尾添加 ▼▼▼
+
+// 为所有搜索输入框绑定事件，任何一个变化都会触发搜索
+document.getElementById('keyword-search-input').addEventListener('input', performChatSearch);
+document.getElementById('sender-search-select').addEventListener('change', performChatSearch);
+document.getElementById('date-search-input').addEventListener('change', performChatSearch);
+
+// 为搜索结果列表绑定点击事件（事件委托）
+document.getElementById('search-results-list').addEventListener('click', (e) => {
+    const item = e.target.closest('.search-result-item');
+    if (item && item.dataset.timestamp) {
+        const timestamp = parseInt(item.dataset.timestamp);
+        jumpToMessage(timestamp);
+    }
+});
+
+// ▲▲▲ 新代码粘贴结束 ▲▲▲
+
+    // ▼▼▼ 在 init() 的事件监听器区域末尾，粘贴下面这一整块新代码 ▼▼▼
+
+    // --- 美化功能事件绑定 ---
+    const themeEditor = document.getElementById('theme-css-editor');
+    
+    // 页面加载时，加载主题列表并显示模板
+    await loadThemesToDropdown();
+    themeEditor.value = THEME_CSS_TEMPLATE;
+
+    // 绑定下拉框选择事件
+    document.getElementById('theme-selector').addEventListener('change', handleThemeSelection);
+    
+    // 绑定所有操作按钮
+    document.getElementById('apply-theme-btn').addEventListener('click', () => applyThemeCss(themeEditor.value));
+    document.getElementById('save-theme-btn').addEventListener('click', saveCurrentTheme);
+    document.getElementById('save-as-new-theme-btn').addEventListener('click', saveAsNewTheme);
+    document.getElementById('rename-theme-btn').addEventListener('click', renameSelectedTheme);
+    document.getElementById('delete-theme-btn').addEventListener('click', deleteSelectedTheme);
+    document.getElementById('export-theme-btn').addEventListener('click', exportTheme);
+    
+    // 绑定导入按钮和隐藏的文件选择器
+    document.getElementById('import-theme-btn').addEventListener('click', () => {
+        document.getElementById('import-theme-input').click();
+    });
+    document.getElementById('import-theme-input').addEventListener('change', (e) => {
+        importTheme(e.target.files[0]);
+        e.target.value = null; // 清空，以便下次能选择同一个文件
+    });
+    
+    // ▲▲▲ 新事件绑定结束 ▲▲▲
+
+document.getElementById('api-preset-select').addEventListener('change', handleApiPresetSelectChange);
+document.getElementById('manage-api-presets-btn').addEventListener('click', openApiPresetManager);
+
+            // ▼▼▼ 【全新】锁屏功能事件监听器 ▼▼▼
+
+            // 1. 锁屏壁纸上传
+            document.getElementById('lockscreen-wallpaper-upload-input').addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if(file) {
+                    const dataUrl = await new Promise((res, rej) => {
+                        const reader = new FileReader();
+                        reader.onload = () => res(reader.result);
+                        reader.onerror = () => rej(reader.error);
+                        reader.readAsDataURL(file);
+                    });
+                    newLockscreenWallpaperBase64 = dataUrl;
+                    renderWallpaperScreen(); // 上传后实时预览
+                }
+            });
+
+            // 2. 密码输入框按钮
+            document.getElementById('password-confirm-btn').addEventListener('click', checkPassword);
+            document.getElementById('password-cancel-btn').addEventListener('click', hidePasswordModal);
+            // 允许在输入框内按回车键确认
+            document.getElementById('password-input-field').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+
+            // 3. 【全新】带有动画效果的上滑解锁手势
+            const lockScreen = document.getElementById('lock-screen');
+            const unlockHint = document.getElementById('unlock-hint');
+            let touchStartY = 0;
+            let isSwiping = false;
+
+// 统一的开始处理函数
+const handleUnlockStart = (e) => {
+    if (document.getElementById('password-modal-overlay').classList.contains('visible')) return;
+    
+    // (你原来的其他逻辑保持不变)
+    const blurBg = document.getElementById('lock-screen-background-blur');
+    if (state.globalSettings.password) {
+        blurBg.style.backgroundImage = lockScreen.style.backgroundImage;
+        blurBg.style.display = 'block';
+    } else {
+        document.getElementById('home-screen').classList.add('active');
+    }
+    
+    touchStartY = getEventCoords(e).y; // 使用辅助函数获取Y坐标
+    isSwiping = true;
+    lockScreen.style.transition = 'none';
+    unlockHint.style.transition = 'none';
+};
+
+// 统一的移动处理函数
+const handleUnlockMove = (e) => {
+    if (!isSwiping) return;
+    const currentY = getEventCoords(e).y; // 使用辅助函数
+    let diffY = currentY - touchStartY;
+    // (你原来的其他逻辑保持不变)
+    if (diffY > 0) diffY = 0;
+    lockScreen.style.transform = `translateY(${diffY}px)`;
+    unlockHint.style.opacity = Math.max(0, 1 - Math.abs(diffY) / 100);
+    if (state.globalSettings.password) {
+        const blurBg = document.getElementById('lock-screen-background-blur');
+        blurBg.style.opacity = Math.min(1, Math.abs(diffY) / 80);
+    }
+};
+
+// 统一的结束处理函数
+const handleUnlockEnd = (e) => {
+    if (!isSwiping) return;
+    isSwiping = false;
+
+    // (你原来的其他逻辑保持不变)
+    lockScreen.style.transition = 'transform 0.3s ease-out';
+    unlockHint.style.transition = 'opacity 0.3s ease-out';
+    const blurBg = document.getElementById('lock-screen-background-blur');
+    
+    // 注意：touchend事件的坐标在 e.changedTouches[0]
+    const touchEndY = e.changedTouches ? e.changedTouches[0].clientY : e.pageY;
+    const swipeDistance = touchStartY - touchEndY;
+    
+    if (swipeDistance > 80) {
+        lockScreen.style.transform = 'translateY(-100%)';
+        setTimeout(() => {
+            if (state.globalSettings.password) {
+                showPasswordModal();
+            } else {
+                unlockPhone();
+            }
+        }, 300);
+    } else {
+        lockScreen.style.transform = 'translateY(0)';
+        unlockHint.style.opacity = '1';
+        if (state.globalSettings.password) {
+            blurBg.style.opacity = '0';
+            setTimeout(() => { blurBg.style.display = 'none'; }, 300);
+        } else {
+            document.getElementById('home-screen').classList.remove('active');
+        }
+    }
+};
+
+// 2. 绑定两种事件到同一套处理逻辑上
+lockScreen.addEventListener('touchstart', handleUnlockStart, { passive: true });
+lockScreen.addEventListener('touchmove', handleUnlockMove, { passive: true });
+lockScreen.addEventListener('touchend', handleUnlockEnd, { passive: true });
+
+lockScreen.addEventListener('mousedown', handleUnlockStart);
+// 注意：mousemove和mouseup最好绑定在document上，防止鼠标拖出范围后失效
+document.addEventListener('mousemove', handleUnlockMove);
+document.addEventListener('mouseup', handleUnlockEnd);
             
-            showScreen('home-screen');
+            // ▲▲▲ 新事件监听器粘贴结束 ▲▲▲
+
+// 【全新】为聊天底部工具栏添加鼠标拖动滚动功能
+const actionsTopBar = document.getElementById('chat-input-actions-top');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+actionsTopBar.addEventListener('mousedown', (e) => {
+    isDown = true;
+    actionsTopBar.classList.add('grabbing'); // 添加一个class来改变鼠标样式
+    startX = e.pageX - actionsTopBar.offsetLeft;
+    scrollLeft = actionsTopBar.scrollLeft;
+});
+
+actionsTopBar.addEventListener('mouseleave', () => {
+    isDown = false;
+    actionsTopBar.classList.remove('grabbing');
+});
+
+actionsTopBar.addEventListener('mouseup', () => {
+    isDown = false;
+    actionsTopBar.classList.remove('grabbing');
+});
+
+actionsTopBar.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - actionsTopBar.offsetLeft;
+    const walk = (x - startX) * 2; // 乘以2可以增加拖动速度，感觉更灵敏
+    actionsTopBar.scrollLeft = scrollLeft - walk;
+});
+
+
+            // ===================================================================
+            // 5. 启动！
+            
+            // 应用壁纸并更新所有时钟
+            applyLockscreenWallpaper();
+            updateLockClock();
+            
+            // 核心启动逻辑：现在总是显示锁屏界面
+            lockPhone();
         }
 
         init();
@@ -15270,4 +18367,3 @@ document.getElementById('existing-categories-list').addEventListener('click', (e
 </script>
 </body>
 </html>
-
