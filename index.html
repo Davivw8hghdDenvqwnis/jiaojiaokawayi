@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+ <!-- 在这里粘贴下面的脚本 -->
+    <script>
+        // 检查 sessionStorage 中是否存在已验证的标志
+        if (sessionStorage.getItem('isAuthenticated') !== 'true') {
+            // 如果不存在，说明用户未经验证，立即跳转回密码输入页面
+            window.location.href = 'index.html';
+        }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/HW5nLGKp/IMG-6871.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/LsDj0HsL/99985605cd73e222fa4ad523333b0706.jpg">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <title>EPhone</title>
@@ -18366,3 +18375,4 @@ actionsTopBar.addEventListener('mousemove', (e) => {
 </script>
 </body>
 </html>
+
